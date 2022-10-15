@@ -1,20 +1,12 @@
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { SetDefaultPageSize } from '@src/decorators/set-default-page-size.decorator';
 import { faker } from '@faker-js/faker';
+import { mockCtx, mockRequest } from '../../test/mock/mock-ctx';
 
 describe('SetDefaultPageSize decorator', () => {
-  const factory = getParamDecoratorFactory(SetDefaultPageSize);
-  let request = {
-    query: {},
-  };
-  let ctx = {
-    switchToHttp() {
-      return this;
-    },
-    getRequest() {
-      return request;
-    },
-  };
+  let factory;
+  let ctx;
+  let request;
 
   function getParamDecoratorFactory(decorator) {
     class Test {
@@ -28,17 +20,9 @@ describe('SetDefaultPageSize decorator', () => {
   }
 
   beforeEach(() => {
-    request = {
-      query: {},
-    };
-    ctx = {
-      switchToHttp() {
-        return this;
-      },
-      getRequest() {
-        return request;
-      },
-    };
+    factory = getParamDecoratorFactory(SetDefaultPageSize);
+    ctx = mockCtx;
+    request = mockRequest;
   });
 
   it('클라이언트에게 들어온 size 기 있을 경우 설정되면 안됨', () => {
@@ -56,6 +40,7 @@ describe('SetDefaultPageSize decorator', () => {
 
   it('클라이언트에게 들어온 size 기 undefined 일 경우 정상 설정', () => {
     const randomNumber = faker.datatype.number();
+
     request.query['pageSize'] = undefined;
 
     expect(request.query['pageSize']).toBeUndefined();
