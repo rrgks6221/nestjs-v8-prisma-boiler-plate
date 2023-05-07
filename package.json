@@ -1,7 +1,7 @@
 {
-  "name": "nestjs-v9-prisma-boiler-plate",
+  "name": "nestjs-prisma-boiler-plate",
   "version": "0.0.1",
-  "description": "",
+  "description": "nestjs prisma boiler plate",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
