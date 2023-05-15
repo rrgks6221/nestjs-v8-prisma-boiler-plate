@@ -1,6 +1,6 @@
 // prisma/seed.ts
 
-import { PrismaClient } from '@prisma/client';
+import { LoginType, PrismaClient, Role } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
 
@@ -12,16 +12,18 @@ async function main() {
 
   for (let i = 0; i < 500; i += 1) {
     const email = faker.internet.email();
-    const name = faker.name.fullName();
-    const role = Number(faker.datatype.boolean());
+    const nickname = faker.name.fullName();
+    const loginType = LoginType.EMAIL;
+    const role = Role.USER;
     const password = await bcrypt.hash(faker.internet.password(), SALT);
 
     const user = await prisma.user.upsert({
       where: { email },
       update: {},
       create: {
+        loginType,
         email,
-        name,
+        nickname,
         role,
         password,
       },
@@ -32,16 +34,14 @@ async function main() {
     const randomNumber = +faker.random.numeric(1);
 
     for (let j = 0; j < randomNumber; j += 1) {
-      const published = faker.datatype.boolean();
       const title = faker.random.words(3);
       const description = faker.random.words(10);
 
       const post = await prisma.post.create({
         data: {
+          userId: user.id,
           title,
-          published,
           description,
-          authorId: user.id,
         },
       });
 
