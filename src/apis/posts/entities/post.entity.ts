@@ -1,35 +1,24 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { IdResponseType } from '@src/types/id-response-type';
-import { DateResponseType } from '@src/types/date-response.type';
+import { ApiProperty } from '@nestjs/swagger';
 import { Post as PostModel } from '@prisma/client';
+import { BaseEntity } from '@src/entities/base.entity';
 
-export class PostEntity
-  extends IntersectionType(IdResponseType, DateResponseType)
-  implements PostModel
-{
+export class PostEntity extends BaseEntity implements PostModel {
   @ApiProperty({
-    description: '게시 여부',
-    required: true,
-    default: false,
+    description: 'user 고유 ID',
+    type: 'integer',
+    minimum: 1,
   })
-  published: boolean;
+  userId: number;
 
   @ApiProperty({
     description: 'title',
-    required: true,
+    minimum: 1,
+    maximum: 255,
   })
   title: string;
 
   @ApiProperty({
     description: 'description',
-    required: false,
-    default: null,
   })
   description: string;
-
-  @ApiProperty({
-    description: '게시한 유저 고유 id',
-    required: true,
-  })
-  authorId: number;
 }

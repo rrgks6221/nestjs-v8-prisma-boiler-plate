@@ -1,14 +1,30 @@
-import { IntersectionType } from '@nestjs/swagger';
-import { IdResponseType } from '@src/types/id-response-type';
-import { DateResponseType } from '@src/types/date-response.type';
-import { User } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
+import { LoginType, Role, User } from '@prisma/client';
+import { BaseEntity } from '@src/entities/base.entity';
 
-export class UserEntity
-  extends IntersectionType(IdResponseType, DateResponseType)
-  implements User
-{
-  password: string;
+export class UserEntity extends BaseEntity implements User {
+  password: string | null;
+
+  @ApiProperty({
+    description: 'user login type',
+    enum: LoginType,
+  })
+  loginType: LoginType;
+
+  @ApiProperty({
+    description: 'email',
+    format: 'email',
+  })
   email: string;
-  name: string | null;
-  role: number;
+
+  @ApiProperty({
+    description: 'nickname',
+  })
+  nickname: string;
+
+  @ApiProperty({
+    description: 'role',
+    enum: Role,
+  })
+  role: Role;
 }
