@@ -10,23 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  password  String   @db.VarChar(255)
-  email     String   @unique
-  name      String?
-  role      Int
-  posts     Post[]
+  // 고유 ID
+  id        Int       @id @default(autoincrement())
+  // 패스워드
+  password  String?   @db.VarChar(255)
+  // email
+  email     String    @unique @db.VarChar(255)
+  // nickname
+  nickname  String    @db.VarChar(255)
+  // role
+  role      Role      @default(USER)
+  /// 생성일자
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  /// 수정일자
+  updatedAt DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  /// 삭제일자
+  deletedAt DateTime? @db.Timestamp(6)
+
+  // related posts
+  posts Post[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(false)
-  title     String   @db.VarChar(255)
-  description   String?
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  // 고유 ID
+  id          Int       @id @default(autoincrement())
+  // user 고유 ID
+  userId      Int
+  // 제목
+  title       String    @db.VarChar(255)
+  // 본문
+  description String
+  /// 생성일자
+  createdAt   DateTime  @default(now()) @db.Timestamp(6)
+  /// 수정일자
+  updatedAt   DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  /// 삭제일자
+  deletedAt   DateTime? @db.Timestamp(6)
+
+  // related user
+  user User @relation(fields: [userId], references: [id])
 }
