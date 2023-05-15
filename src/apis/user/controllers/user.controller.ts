@@ -1,6 +1,4 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { UserService } from '../services/user.service';
-import { CreateUserRequestBodyDto } from '../dto/create-user-request-body.dto';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -14,6 +12,8 @@ import { User } from '@prisma/client';
 import { AccessTokenType } from '@src/apis/user/types/access-token.type';
 import { SetModelNameToParam } from '@src/decorators/set-model-name-to-param.decorator';
 import { ModelName } from '@src/constants/enum';
+import { UserService } from '../services/user.service';
+import { CreateUserRequestBodyDto } from '../dto/create-user-request-body.dto';
 
 @ApiTags('유저')
 @Controller('api/user')
@@ -27,7 +27,7 @@ export class UserController {
   })
   create(
     @Body() createUserDto: CreateUserRequestBodyDto,
-  ): Promise<UserResponseType> {
+  ): Promise<Omit<User, 'password'> & AccessTokenType> {
     return this.userService.create(createUserDto);
   }
 

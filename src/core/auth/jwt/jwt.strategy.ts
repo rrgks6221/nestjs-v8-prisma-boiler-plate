@@ -19,17 +19,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user: User = await this.prismaService.user.findFirst({
+    const existUser: User | null = await this.prismaService.user.findFirst({
       where: {
         id: payload.id,
       },
     });
 
-    if (!user) {
+    if (!existUser) {
       throw new UnauthorizedException();
     }
 
-    delete user.password;
+    const { password, ...user } = existUser;
 
     return user;
   }

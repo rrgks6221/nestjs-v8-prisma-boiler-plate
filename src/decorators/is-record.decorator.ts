@@ -17,7 +17,9 @@ export class IsRecordConstraint implements ValidatorConstraintInterface {
     const { model, field }: Target = args.constraints[0];
     const isShouldBeExist = args.constraints[1];
     const targetName = field || args.property;
-    const modelName = model || args.object['model'];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const modelName = model || args.object.model;
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -30,9 +32,11 @@ export class IsRecordConstraint implements ValidatorConstraintInterface {
     return isShouldBeExist === !!uniqueRecord;
   }
 
-  defaultMessage(validationArguments?: ValidationArguments): string {
+  defaultMessage(validationArguments: ValidationArguments): string {
     const { value, property, constraints, object } = validationArguments;
     const { model, field } = constraints[0];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const modelName = model || object['model'];
     const isShouldBeExist = constraints[1];
 

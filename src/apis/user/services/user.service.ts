@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserRequestBodyDto } from '../dto/create-user-request-body.dto';
 import { PrismaService } from '@src/core/database/prisma/prisma.service';
 import bcrypt from 'bcrypt';
 import { AuthService } from '@src/core/auth/services/auth.service';
-import { UserResponseType } from '@src/apis/user/types/response/success/user-response.type';
 import { User } from '@prisma/client';
 import { AccessTokenType } from '@src/apis/user/types/access-token.type';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -18,7 +18,7 @@ export class UserService {
 
   async create(
     createUserDto: CreateUserRequestBodyDto,
-  ): Promise<UserResponseType & AccessTokenType> {
+  ): Promise<Omit<User, 'password'> & AccessTokenType> {
     createUserDto.password = await bcrypt.hash(
       createUserDto.password,
       this.SALT,
@@ -35,13 +35,17 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<Omit<User, 'password'>> {
-    const { password, ...user }: User = await this.prismaService.user.findFirst(
-      {
-        where: {
-          id,
-        },
+    const existUser: User | null = await this.prismaService.user.findFirst({
+      where: {
+        id,
       },
-    );
+    });
+
+    if (!existUser) {
+      throw new NotFoundException();
+    }
+
+    const { password, ...user } = existUser;
 
     return user;
   }

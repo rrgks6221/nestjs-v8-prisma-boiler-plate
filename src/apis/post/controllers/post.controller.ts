@@ -30,6 +30,7 @@ import { PutUpdatePostDto } from '@src/apis/post/dto/put-update-post-dto';
 import { ModelName } from '@src/constants/enum';
 import { PostListQueryDto } from '@src/apis/post/dto/post-list-query-dto';
 import { SetDefaultPageSize } from '@src/decorators/set-default-page-size.decorator';
+import { UserEntity } from '@src/apis/user/entities/user.entity';
 
 @ApiBearerAuth()
 @ApiTags('post')
@@ -42,7 +43,7 @@ export class PostController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(
-    @UserLogin() user,
+    @UserLogin() user: UserEntity,
     @Body() createPostDto: CreatePostDto,
   ): Promise<PostModel> {
     return this.postService.create(user.id, createPostDto);
@@ -64,7 +65,7 @@ export class PostController {
   @ApiOkResponse({ type: PostEntity })
   findOne(
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
-  ): Promise<PostEntity> {
+  ): Promise<PostModel | null> {
     return this.postService.findOne(param.id);
   }
 
@@ -76,7 +77,7 @@ export class PostController {
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
     @UserLogin('id') authorId: number,
     @Body() putUpdatePostDto: PutUpdatePostDto,
-  ): Promise<PostEntity> {
+  ): Promise<PostModel> {
     return this.postService.putUpdate(param.id, authorId, putUpdatePostDto);
   }
 
@@ -88,7 +89,7 @@ export class PostController {
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
     @UserLogin('id') authorId: number,
     @Body() patchUpdatePostDto: PatchUpdatePostDto,
-  ): Promise<PostEntity> {
+  ): Promise<PostModel> {
     return this.postService.patchUpdate(param.id, authorId, patchUpdatePostDto);
   }
 
@@ -99,7 +100,7 @@ export class PostController {
   remove(
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
     @UserLogin('id') authorId: number,
-  ): Promise<PostEntity> {
+  ): Promise<PostModel> {
     return this.postService.remove(param.id, authorId);
   }
 }

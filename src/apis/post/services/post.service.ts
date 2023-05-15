@@ -41,10 +41,10 @@ export class PostService {
       this.LIKE_SEARCH_FIELDS,
     );
 
-    const order = this.queryHelper.buildOrderByPropForFind<PostField>(
-      [orderBy],
-      [sortBy],
-    );
+    const order = this.queryHelper.buildOrderByPropForFind<PostField>({
+      orderBy: [orderBy],
+      sortBy: [sortBy],
+    });
 
     return this.prismaService.post.findMany({
       where,
@@ -54,7 +54,7 @@ export class PostService {
     });
   }
 
-  findOne(id: number): Promise<PostEntity> {
+  findOne(id: number): Promise<Post | null> {
     return this.prismaService.post.findUnique({
       where: {
         id,
@@ -66,8 +66,8 @@ export class PostService {
     id: number,
     authorId: number,
     putUpdatePostDto: PutUpdatePostDto,
-  ): Promise<PostEntity> {
-    const postByUser: PostEntity =
+  ): Promise<Post> {
+    const postByUser: Post | null =
       await this.postAuthorityHelper.checkIdentification(id, authorId);
 
     if (!postByUser) {
@@ -89,8 +89,8 @@ export class PostService {
     id: number,
     authorId: number,
     patchUpdatePostDto: PatchUpdatePostDto,
-  ): Promise<PostEntity> {
-    const postByUser: PostEntity =
+  ): Promise<Post> {
+    const postByUser: Post | null =
       await this.postAuthorityHelper.checkIdentification(id, authorId);
 
     if (!postByUser) {
@@ -107,8 +107,8 @@ export class PostService {
     });
   }
 
-  async remove(id: number, authorId: number): Promise<PostEntity> {
-    const postByUser: PostEntity =
+  async remove(id: number, authorId: number): Promise<Post> {
+    const postByUser: Post | null =
       await this.postAuthorityHelper.checkIdentification(id, authorId);
 
     if (!postByUser) {

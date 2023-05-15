@@ -15,5 +15,5 @@ export class IdRequestParamDto {
   id: number;
 
   @IsOptional()
-  model;
+  private model: string;
 }
