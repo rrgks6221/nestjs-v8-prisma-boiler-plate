@@ -20,7 +20,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserLogin } from '@src/decorators/user-login.decorator';
+import { UserLogin } from '@src/decorators/user.decorator';
 import { Post as PostModel } from '@prisma/client';
 import { PostEntity } from '@src/apis/post/entities/post.entity';
 import { IdRequestParamDto } from '@src/dtos/id-request-param.dto';

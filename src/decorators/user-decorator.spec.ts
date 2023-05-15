@@ -1,8 +1,8 @@
 import { getParamDecoratorFactory, mock, mockRequest } from '@test/mock/mock';
-import { UserLogin } from '@src/decorators/user-login.decorator';
+import { UserLogin } from '@src/decorators/user.decorator';
 import { faker } from '@faker-js/faker';
 
-describe('UserLogin decorator', () => {
+describe('User decorator', () => {
   let factory: any;
   let ctx: any;
   let request: any;
