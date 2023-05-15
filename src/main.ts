@@ -7,11 +7,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '@src/core/database/prisma/prisma.service';
 import { useContainer } from 'class-validator';
-import { HttpBadRequestExceptionFilter } from '@src/filters/http-bad-request-exception.filter';
-import { HttpNodeInternalServerErrorExceptionFilter } from '@src/filters/http-node-internal-server-error-exception.filter';
-import { HttpRemainderExceptionFilter } from '@src/filters/http-remainder-exception.filter';
-import { HttpNestInternalServerErrorExceptionFilter } from '@src/filters/http-nest-Internal-server-error-exception.filter';
-import { HttpNotFoundExceptionFilter } from '@src/filters/http-not-found-exception.filter';
+import { HttpNotFoundExceptionFilter } from '@src/core/exceptions/filters/http-not-found-exception.filter';
+import { HttpBadRequestExceptionFilter } from '@src/core/exceptions/filters/http-bad-request-exception.filter';
+import { HttpNodeInternalServerErrorExceptionFilter } from '@src/core/exceptions/filters/http-node-internal-server-error-exception.filter';
+import { HttpRemainderExceptionFilter } from '@src/core/exceptions/filters/http-remainder-exception.filter';
+import { HttpNestInternalServerErrorExceptionFilter } from '@src/core/exceptions/filters/http-nest-Internal-server-error-exception.filter';
 
 declare const module: any;
 
@@ -33,12 +33,13 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalInterceptors(new SuccessInterceptor());
+
   app.useGlobalFilters(
-    new HttpNodeInternalServerErrorExceptionFilter(isProduction),
-    new HttpRemainderExceptionFilter(),
-    new HttpNestInternalServerErrorExceptionFilter(isProduction),
-    new HttpNotFoundExceptionFilter(),
-    new HttpBadRequestExceptionFilter(),
+    app.get(HttpNodeInternalServerErrorExceptionFilter),
+    app.get(HttpRemainderExceptionFilter),
+    app.get(HttpNestInternalServerErrorExceptionFilter),
+    app.get(HttpNotFoundExceptionFilter),
+    app.get(HttpBadRequestExceptionFilter),
   );
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

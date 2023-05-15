@@ -1,4 +1,7 @@
-import { ResponseErrorItem, ResponseJson } from '@src/filters/type';
+import {
+  ResponseErrorItem,
+  ResponseJson,
+} from '@src/core/exceptions/types/exception.type';
 
 /**
  * exception filter 들이 사용하는 메서드 및 멤버변수를 모아놓은 class

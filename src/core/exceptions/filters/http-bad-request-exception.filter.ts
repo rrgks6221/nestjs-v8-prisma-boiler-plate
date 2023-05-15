@@ -5,8 +5,11 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ExceptionError, ResponseJson } from '@src/filters/type';
-import { HttpExceptionHelper } from '@src/filters/http-exception.helper';
+import {
+  ExceptionError,
+  ResponseJson,
+} from '@src/core/exceptions/types/exception.type';
+import { HttpExceptionHelper } from '@src/core/exceptions/helpers/http-exception.helper';
 
 /**
  * 400 번 에러를 잡는 exception filter
