@@ -22,6 +22,14 @@ export class PostsService {
     private readonly queryHelper: QueryHelper,
   ) {}
 
+  findOne(id: number): Promise<Post | null> {
+    return this.prismaService.post.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   create(userId: number, createPostDto: CreatePostDto): Promise<Post> {
     return this.prismaService.post.create({
       data: {
@@ -50,14 +58,6 @@ export class PostsService {
       orderBy: order,
       skip: page * pageSize,
       take: pageSize,
-    });
-  }
-
-  findOne(id: number): Promise<Post | null> {
-    return this.prismaService.post.findUnique({
-      where: {
-        id,
-      },
     });
   }
 
