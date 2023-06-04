@@ -66,7 +66,7 @@ export class PostsController {
   findOne(
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
   ): Promise<PostModel> {
-    return this.postService.findOneByIdOrNotFound(param.id);
+    return this.postService.findOne(param.id);
   }
 
   @ApiOperation({ summary: 'posts 수정' })
@@ -100,7 +100,7 @@ export class PostsController {
   remove(
     @Param() @SetModelNameToParam(ModelName.Post) param: IdRequestParamDto,
     @User('id') authorId: number,
-  ): Promise<PostModel> {
+  ): Promise<number> {
     return this.postService.remove(param.id, authorId);
   }
 }
