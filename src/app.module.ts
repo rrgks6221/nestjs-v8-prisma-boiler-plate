@@ -1,11 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { apiModules } from '@src/apis';
 import { AppController } from '@src/app.controller';
 import { AppService } from '@src/app.service';
-import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
-import { LoggerMiddleware } from '@src/middlewares/logger.middleware';
-import { apiModules } from '@src/apis';
 import { CoreModule } from '@src/core/core.module';
+import { LoggerMiddleware } from '@src/middlewares/logger.middleware';
+import Joi from 'joi';
 
 @Module({
   imports: [
