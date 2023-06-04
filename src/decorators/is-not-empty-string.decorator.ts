@@ -1,9 +1,6 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 
-export function IsNotEmptyString(
-  property: string,
-  validationOptions?: ValidationOptions,
-) {
+export function IsNotEmptyString(validationOptions?: ValidationOptions) {
   return function (object: any, propertyName: string) {
     registerDecorator({
       target: object.constructor,

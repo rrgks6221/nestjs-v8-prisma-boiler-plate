@@ -12,13 +12,14 @@ export class PostEntity extends BaseEntity implements PostModel {
 
   @ApiProperty({
     description: 'title',
-    minimum: 1,
-    maximum: 255,
+    minLength: 1,
+    maxLength: 255,
   })
   title: string;
 
   @ApiProperty({
     description: 'description',
+    minLength: 1,
   })
   description: string;
 }

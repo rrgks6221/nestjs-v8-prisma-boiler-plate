@@ -1,33 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { PostEntity } from '@src/apis/posts/entities/post.entity';
+import { IsNotEmptyString } from '@src/decorators/is-not-empty-string.decorator';
+import { Length } from 'class-validator';
 
-export class CreatePostDto {
+export class CreatePostDto
+  implements Pick<PostEntity, 'title' | 'description'>
+{
   @ApiProperty({
-    description: '게시 여부',
-    required: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  published: boolean;
-
-  @ApiProperty({
-    example: 'title',
     description: 'title',
-    required: true,
-    type: 'string',
+    minLength: 1,
     maxLength: 255,
   })
-  @MaxLength(255)
-  @IsNotEmpty()
+  @Length(1, 255)
+  @IsNotEmptyString()
   title: string;
 
   @ApiProperty({
-    example: 'description',
     description: 'description',
-    required: false,
-    type: 'string',
   })
-  @IsOptional()
+  @IsNotEmptyString()
   description: string;
 }
