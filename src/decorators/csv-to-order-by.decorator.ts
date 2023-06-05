@@ -46,7 +46,6 @@ export const CsvToOrderBy = <T extends readonly string[] = readonly string[]>(
       if (allowFields.length === 0) {
         return defaultOrderBy;
       }
-      console.log(allowFields);
 
       return allowFields.map((allowField) => {
         const field = getField(allowField);
