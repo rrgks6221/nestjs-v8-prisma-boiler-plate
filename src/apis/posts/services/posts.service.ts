@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Post } from '@prisma/client';
-import { CreatePostDto } from '@src/apis/posts/dto/create-post.dto';
+import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { PatchUpdatePostDto } from '@src/apis/posts/dto/patch-update-post.dto';
 import { PostListQueryDto } from '@src/apis/posts/dto/post-list-query-dto';
 import { PutUpdatePostDto } from '@src/apis/posts/dto/put-update-post-dto';
@@ -41,7 +41,10 @@ export class PostsService {
     return this.buildDetailResponse(existPost.id);
   }
 
-  async create(userId: number, createPostDto: CreatePostDto): Promise<Post> {
+  async create(
+    userId: number,
+    createPostDto: CreatePostBodyDto,
+  ): Promise<Post> {
     const newPost = await this.prismaService.post.create({
       select: {
         id: true,

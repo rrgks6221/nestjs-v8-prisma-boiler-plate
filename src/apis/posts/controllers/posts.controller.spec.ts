@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostsController } from '@src/apis/posts/controllers/posts.controller';
-import { CreatePostDto } from '@src/apis/posts/dto/create-post.dto';
+import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { PatchUpdatePostDto } from '@src/apis/posts/dto/patch-update-post.dto';
 import { PostListQueryDto } from '@src/apis/posts/dto/post-list-query-dto';
 import { PutUpdatePostDto } from '@src/apis/posts/dto/put-update-post-dto';
@@ -78,13 +78,13 @@ describe('PostsController', () => {
 
   describe('create', () => {
     let user: UserEntity;
-    let body: CreatePostDto;
+    let body: CreatePostBodyDto;
 
     let post: PostEntity;
 
     beforeEach(() => {
       user = new UserEntity();
-      body = new CreatePostDto();
+      body = new CreatePostBodyDto();
 
       post = new PostEntity();
     });

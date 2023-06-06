@@ -30,7 +30,7 @@ import {
 } from '@src/decorators/set-response.decorator';
 import { User } from '@src/decorators/user.decorator';
 import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
-import { CreatePostDto } from '../dto/create-post.dto';
+import { CreatePostBodyDto } from '../dto/create-post-body.dto';
 import { PostsService } from '../services/posts.service';
 
 @ApiBearerAuth()
@@ -67,7 +67,7 @@ export class PostsController {
   @Post()
   create(
     @User() user: UserEntity,
-    @Body() createPostDto: CreatePostDto,
+    @Body() createPostDto: CreatePostBodyDto,
   ): Promise<PostModel> {
     return this.postService.create(user.id, createPostDto);
   }
