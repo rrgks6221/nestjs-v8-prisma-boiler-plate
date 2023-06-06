@@ -7,7 +7,7 @@ import { Post } from '@prisma/client';
 import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
-import { PutUpdatePostDto } from '@src/apis/posts/dto/put-update-post-dto';
+import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
 
@@ -83,7 +83,7 @@ export class PostsService {
   async putUpdate(
     id: number,
     userId: number,
-    putUpdatePostDto: PutUpdatePostDto,
+    putUpdatePostDto: PutUpdatePostBodyDto,
   ): Promise<Post> {
     await this.checkPostOwner(id, userId);
 

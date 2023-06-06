@@ -21,7 +21,7 @@ import { Post as PostModel } from '@prisma/client';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
-import { PutUpdatePostDto } from '@src/apis/posts/dto/put-update-post-dto';
+import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import {
@@ -80,7 +80,7 @@ export class PostsController {
   putUpdate(
     @Param('postId', ParsePositiveIntPipe) postId: number,
     @User() user: UserEntity,
-    @Body() putUpdatePostDto: PutUpdatePostDto,
+    @Body() putUpdatePostDto: PutUpdatePostBodyDto,
   ): Promise<PostModel> {
     return this.postService.putUpdate(postId, user.id, putUpdatePostDto);
   }

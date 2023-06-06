@@ -4,7 +4,7 @@ import { PostsController } from '@src/apis/posts/controllers/posts.controller';
 import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
-import { PutUpdatePostDto } from '@src/apis/posts/dto/put-update-post-dto';
+import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
@@ -100,14 +100,14 @@ describe('PostsController', () => {
   describe('putUpdate', () => {
     let postId: number;
     let user: UserEntity;
-    let putUpdatePostDto: PutUpdatePostDto;
+    let putUpdatePostDto: PutUpdatePostBodyDto;
 
     let post: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       user = new UserEntity();
-      putUpdatePostDto = new PutUpdatePostDto();
+      putUpdatePostDto = new PutUpdatePostBodyDto();
 
       post = new PostEntity();
     });
