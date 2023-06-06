@@ -24,7 +24,7 @@ export class MockUserService implements MockClass<UsersService> {
   findOne = jest.fn();
 }
 
-export class MockPostService implements MockClass<PostsService> {
+export class MockPostsService implements MockClass<PostsService> {
   findAllAndCount = jest.fn();
   create = jest.fn();
   findOne = jest.fn();
