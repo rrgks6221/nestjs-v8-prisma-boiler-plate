@@ -17,7 +17,7 @@ import { HttpRemainderExceptionFilter } from '@src/core/exception/filters/http-r
 import { HttpExceptionHelper } from '@src/core/exception/helpers/http-exception.helper';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { SuccessInterceptor } from '@src/interceptors/success.interceptor';
-import { ValidationError, useContainer } from 'class-validator';
+import { useContainer, ValidationError } from 'class-validator';
 import helmet from 'helmet';
 
 declare const module: any;
