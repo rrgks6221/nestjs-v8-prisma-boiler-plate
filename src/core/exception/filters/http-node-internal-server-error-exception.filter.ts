@@ -32,7 +32,7 @@ export class HttpNodeInternalServerErrorExceptionFilter
     const isProduction = this.appConfigService.isProduction();
 
     const exceptionError = HttpExceptionHelper.createError({
-      code: ERROR_CODE.COMMON001,
+      code: ERROR_CODE.CODE001,
       message: 'server error',
     });
 

@@ -43,7 +43,7 @@ async function bootstrap() {
 
         throw new BadRequestException(
           HttpExceptionHelper.createError({
-            code: ERROR_CODE.COMMON003,
+            code: ERROR_CODE.CODE003,
             messages,
           }),
         );

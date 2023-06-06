@@ -1,8 +1,8 @@
 export const ERROR_CODE = {
-  // server error
-  COMMON001: 'COMMON001',
-  // api path not found
-  COMMON002: 'COMMON002',
-  // invalid request parameter
-  COMMON003: 'COMMON003',
+  /** server error */
+  CODE001: 'CODE001',
+  /** api path not found */
+  CODE002: 'CODE002',
+  /** invalid request parameter */
+  CODE003: 'CODE003',
 } as const;

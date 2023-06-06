@@ -38,7 +38,7 @@ export class HttpNotFoundExceptionFilter
     // path not found
     if (/^\bCannot (GET|POST|PATCH|PUT|DELETE)\b/.test(err.message)) {
       exceptionError = HttpExceptionHelper.createError({
-        code: ERROR_CODE.COMMON002,
+        code: ERROR_CODE.CODE002,
         message: method + ' ' + path + ' ' + 'not found',
       });
     } else {
