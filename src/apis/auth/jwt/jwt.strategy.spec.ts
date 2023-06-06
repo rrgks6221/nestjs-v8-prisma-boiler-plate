@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
-import { JwtModule, JwtSecretRequestType } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtStrategy } from '@src/apis/auth/jwt/jwt.strategy';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
@@ -13,12 +11,7 @@ describe('JwtStrategy', () => {
   let jwtStrategy: JwtStrategy;
 
   beforeEach(async () => {
-    const config = {
-      secretOrKeyProvider: (requestType: JwtSecretRequestType) => 'secret',
-    };
-
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PassportModule, JwtModule.register(config)],
       providers: [
         JwtStrategy,
         {
@@ -35,6 +28,7 @@ describe('JwtStrategy', () => {
         },
       ],
     }).compile();
+
     jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
   });
 
