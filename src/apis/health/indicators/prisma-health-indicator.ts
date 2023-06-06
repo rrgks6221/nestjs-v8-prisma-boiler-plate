@@ -17,7 +17,7 @@ export class PrismaHealthIndicator extends HealthIndicator {
       await this.prismaService.$queryRaw`SELECT 1`;
       return this.getStatus(key, true);
     } catch (e) {
-      throw new HealthCheckError('Prisma check failed', e);
+      throw new HealthCheckError('rdb check failed', e);
     }
   }
 }

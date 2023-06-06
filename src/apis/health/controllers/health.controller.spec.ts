@@ -5,7 +5,7 @@ import { PrismaHealthIndicator } from '@src/apis/health/indicators/prisma-health
 import { MockPrismaHealthIndicator } from '@test/mock/indicator.mock';
 import { MockHealthCheckService } from '@test/mock/services.mock';
 
-describe('AuthService', () => {
+describe('HealthController', () => {
   let controller: HealthController;
   let mockHealthCheckService: MockHealthCheckService;
   let mockPrismaHealthIndicator: MockPrismaHealthIndicator;
