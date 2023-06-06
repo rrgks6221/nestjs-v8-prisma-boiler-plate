@@ -5,4 +5,6 @@ export const ERROR_CODE = {
   CODE002: 'CODE002',
   /** invalid request parameter */
   CODE003: 'CODE003',
+  /** invalid token */
+  CODE004: 'CODE004',
 } as const;
