@@ -92,7 +92,7 @@ export class SuccessInterceptor implements NestInterceptor {
   }
 
   private buildDeleteResponse(data: unknown) {
-    if (typeof data !== 'number') {
+    if (!Number.isInteger(data)) {
       throw new InternalServerErrorException();
     }
 
