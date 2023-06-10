@@ -7,13 +7,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
+import { UsersService } from '@src/apis/users/services/users.service';
 import { AccessTokenType } from '@src/apis/users/types/access-token.type';
 import { UserResponseType } from '@src/apis/users/types/response/success/user-response.type';
 import { ModelName } from '@src/constants/enum';
 import { SetModelNameToParam } from '@src/decorators/set-model-name-to-param.decorator';
 import { IdRequestParamDto } from '@src/dtos/id-request-param.dto';
-import { CreateUserRequestBodyDto } from '../dto/create-user-request-body.dto';
-import { UsersService } from '../services/users.service';
 
 @ApiTags('유저')
 @Controller('api/users')

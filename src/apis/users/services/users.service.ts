@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { AuthService } from '@src/apis/auth/services/auth.service';
+import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { AccessTokenType } from '@src/apis/users/types/access-token.type';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import bcrypt from 'bcrypt';
-import { CreateUserRequestBodyDto } from '../dto/create-user-request-body.dto';
 
 @Injectable()
 export class UsersService {

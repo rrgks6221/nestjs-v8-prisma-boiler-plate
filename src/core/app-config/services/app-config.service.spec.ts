@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 
 class MockConfigService {
   get = jest.fn();

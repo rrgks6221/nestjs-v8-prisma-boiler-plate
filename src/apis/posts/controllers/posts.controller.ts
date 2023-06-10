@@ -18,11 +18,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
+import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
 import { PostBaseResponseDto } from '@src/apis/posts/dto/post-base-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
+import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import {
   ResponseType,
@@ -31,8 +33,6 @@ import {
 import { User } from '@src/decorators/user.decorator';
 import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
 import { BaseController } from '@src/types/type';
-import { CreatePostBodyDto } from '../dto/create-post-body.dto';
-import { PostsService } from '../services/posts.service';
 
 @ApiBearerAuth()
 @ApiTags('post')

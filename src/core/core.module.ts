@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { AppConfigModule } from '@src/core/app-config/app-config.module';
 import { ExceptionFilterModule } from '@src/core/exception/exception-filter.module';
 import { NotificationModule } from '@src/core/notification/notification.module';
 import { PrismaModule } from '@src/core/prisma/prisma.module';
-import { AppConfigModule } from './app-config/app-config.module';
 
 @Module({
   imports: [
