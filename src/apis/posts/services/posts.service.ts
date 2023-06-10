@@ -8,8 +8,12 @@ import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
+import { PostEntity } from '@src/apis/posts/entities/post.entity';
+import { ERROR_CODE } from '@src/constants/error-response-code.constant';
+import { HttpExceptionHelper } from '@src/core/exception/helpers/http-exception.helper';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class PostsService {
@@ -23,44 +27,11 @@ export class PostsService {
     private readonly queryHelper: QueryHelper,
   ) {}
 
-  async findOne(id: number) {
-    const existPost = await this.prismaService.post.findFirst({
-      select: {
-        id: true,
-      },
-      where: {
-        id,
-        deletedAt: null,
-      },
-    });
+  async findAllAndCount(
+    findPostListQueryDto: FindPostListQueryDto,
+  ): Promise<[PostEntity[], number]> {
+    const { page, pageSize, orderBy, ...filter } = findPostListQueryDto;
 
-    if (!existPost) {
-      throw new NotFoundException();
-    }
-
-    return this.buildDetailResponse(existPost.id);
-  }
-
-  async create(
-    userId: number,
-    createPostDto: CreatePostBodyDto,
-  ): Promise<Post> {
-    const newPost = await this.prismaService.post.create({
-      select: {
-        id: true,
-      },
-      data: {
-        title: createPostDto.title,
-        description: createPostDto.description,
-        userId: userId,
-      },
-    });
-
-    return this.buildDetailResponse(newPost.id);
-  }
-
-  findAllAndCount(query: FindPostListQueryDto) {
-    const { page, pageSize, orderBy, ...filter } = query;
     const where = this.queryHelper.buildWherePropForFind(
       filter,
       this.LIKE_SEARCH_FIELDS,
@@ -77,22 +48,68 @@ export class PostsService {
       where,
     });
 
-    return this.prismaService.$transaction([postsQuery, totalCountQuery]);
+    const [posts, count] = await this.prismaService.$transaction([
+      postsQuery,
+      totalCountQuery,
+    ]);
+
+    return [plainToInstance(PostEntity, posts), count];
+  }
+
+  async findOne(postId: number): Promise<PostEntity> {
+    const existPost = await this.prismaService.post.findFirst({
+      select: {
+        id: true,
+      },
+      where: {
+        id: postId,
+        deletedAt: null,
+      },
+    });
+
+    if (!existPost) {
+      throw new NotFoundException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE005,
+          message: `postId ${postId} doesn't exist`,
+        }),
+      );
+    }
+
+    return this.buildBaseResponse(existPost.id);
+  }
+
+  async create(
+    userId: number,
+    createPostBodyDto: CreatePostBodyDto,
+  ): Promise<PostEntity> {
+    const newPost = await this.prismaService.post.create({
+      select: {
+        id: true,
+      },
+      data: {
+        title: createPostBodyDto.title,
+        description: createPostBodyDto.description,
+        userId: userId,
+      },
+    });
+
+    return this.buildBaseResponse(newPost.id);
   }
 
   async putUpdate(
-    id: number,
+    postId: number,
     userId: number,
     putUpdatePostDto: PutUpdatePostBodyDto,
-  ): Promise<Post> {
-    await this.checkPostOwner(id, userId);
+  ): Promise<PostEntity> {
+    await this.checkOwner(postId, userId);
 
     const newPost = await this.prismaService.post.update({
       select: {
         id: true,
       },
       where: {
-        id,
+        id: postId,
       },
       data: {
         title: putUpdatePostDto.title,
@@ -100,52 +117,48 @@ export class PostsService {
       },
     });
 
-    return this.buildDetailResponse(newPost.id);
+    return this.buildBaseResponse(newPost.id);
   }
 
   async patchUpdate(
-    id: number,
+    postId: number,
     userId: number,
     patchUpdatePostDto: PatchUpdatePostBodyDto,
-  ): Promise<Post> {
-    await this.checkPostOwner(id, userId);
+  ): Promise<PostEntity> {
+    await this.checkOwner(postId, userId);
 
     const newPost = await this.prismaService.post.update({
       select: {
         id: true,
       },
       where: {
-        id,
+        id: postId,
       },
       data: {
         description: patchUpdatePostDto.description,
       },
     });
 
-    return this.buildDetailResponse(newPost.id);
+    return this.buildBaseResponse(newPost.id);
   }
 
-  async remove(id: number, userId: number): Promise<number> {
-    await this.checkPostOwner(id, userId);
+  async remove(postId: number, userId: number): Promise<number> {
+    await this.checkOwner(postId, userId);
 
-    await this.prismaService.post.update({
+    const removedPost = await this.prismaService.post.update({
       data: {
         deletedAt: new Date(),
       },
       where: {
-        id,
+        id: postId,
       },
     });
 
-    return this.prismaService.post.count({
-      where: {
-        id,
-      },
-    });
+    return Number(!!removedPost);
   }
 
-  private async checkPostOwner(postId: number, userId: number) {
-    const post = await this.prismaService.post.findFirst({
+  private async checkOwner(postId: number, userId: number) {
+    const existPost = await this.prismaService.post.findFirst({
       select: {
         id: true,
         userId: true,
@@ -156,22 +169,34 @@ export class PostsService {
       },
     });
 
-    if (!post) {
-      throw new NotFoundException();
+    if (!existPost) {
+      throw new NotFoundException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE005,
+          message: `postId ${postId} doesn't exist`,
+        }),
+      );
     }
 
-    if (post.userId !== userId) {
-      throw new ForbiddenException();
+    if (existPost.userId !== userId) {
+      throw new ForbiddenException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE005,
+          message: `post ${postId} is not owned by user ${userId}`,
+        }),
+      );
     }
 
-    return post;
+    return existPost;
   }
 
-  private async buildDetailResponse(postId: number) {
-    return this.prismaService.post.findUniqueOrThrow({
+  private async buildBaseResponse(postId: number) {
+    const post = await this.prismaService.post.findUniqueOrThrow({
       where: {
         id: postId,
       },
     });
+
+    return new PostEntity(post);
   }
 }

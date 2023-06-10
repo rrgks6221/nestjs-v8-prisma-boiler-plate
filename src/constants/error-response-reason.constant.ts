@@ -5,4 +5,5 @@ export const ERROR_REASON = {
   [ERROR_CODE.CODE002]: 'api path not found',
   [ERROR_CODE.CODE003]: 'invalid request parameter',
   [ERROR_CODE.CODE004]: 'invalid token',
+  [ERROR_CODE.CODE005]: 'resource not found',
 } as const;

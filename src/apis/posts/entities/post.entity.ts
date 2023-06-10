@@ -22,4 +22,10 @@ export class PostEntity extends BaseEntity implements PostModel {
     minLength: 1,
   })
   description: string;
+
+  constructor(post: Partial<PostEntity> = {}) {
+    super();
+
+    Object.assign(this, post);
+  }
 }

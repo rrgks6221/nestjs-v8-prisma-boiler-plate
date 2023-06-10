@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class BaseEntity {
   @ApiProperty({
@@ -18,9 +19,6 @@ export class BaseEntity {
   })
   updatedAt: Date;
 
-  @ApiProperty({
-    description: '삭제일자',
-    nullable: true,
-  })
+  @Exclude()
   deletedAt: Date | null;
 }

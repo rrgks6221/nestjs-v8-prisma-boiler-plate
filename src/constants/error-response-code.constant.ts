@@ -7,4 +7,6 @@ export const ERROR_CODE = {
   CODE003: 'CODE003',
   /** invalid token */
   CODE004: 'CODE004',
+  /** resource not found */
+  CODE005: 'CODE005',
 } as const;
