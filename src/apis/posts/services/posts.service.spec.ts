@@ -4,7 +4,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
-import { PostBaseResponseDto } from '@src/apis/posts/dto/post-base-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { PostsService } from '@src/apis/posts/services/posts.service';
@@ -91,17 +90,15 @@ describe('PostsService', () => {
     let postId: number;
     let existPost: PostEntity;
 
-    let postBaseResponseDto: PostBaseResponseDto;
+    let postEntity: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       existPost = new PostEntity();
 
-      postBaseResponseDto = new PostBaseResponseDto();
+      postEntity = new PostEntity();
 
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(
-        postBaseResponseDto,
-      );
+      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('post is not found', async () => {
@@ -115,9 +112,7 @@ describe('PostsService', () => {
     it('find one post', async () => {
       mockPrismaService.post.findFirst.mockResolvedValue(existPost);
 
-      await expect(service.findOne(postId)).resolves.toStrictEqual(
-        postBaseResponseDto,
-      );
+      await expect(service.findOne(postId)).resolves.toStrictEqual(postEntity);
     });
   });
 
@@ -127,7 +122,7 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postBaseResponseDto: PostBaseResponseDto;
+    let postEntity: PostEntity;
 
     beforeEach(() => {
       userId = faker.datatype.number({ min: 1 });
@@ -135,11 +130,9 @@ describe('PostsService', () => {
 
       newPost = new PostEntity();
 
-      postBaseResponseDto = new PostBaseResponseDto();
+      postEntity = new PostEntity();
 
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(
-        postBaseResponseDto,
-      );
+      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('create new post', async () => {
@@ -147,7 +140,7 @@ describe('PostsService', () => {
 
       await expect(
         service.create(userId, createPostBodyDto),
-      ).resolves.toStrictEqual(postBaseResponseDto);
+      ).resolves.toStrictEqual(postEntity);
     });
   });
 
@@ -158,7 +151,7 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postBaseResponseDto: PostBaseResponseDto;
+    let postEntity: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
@@ -167,15 +160,13 @@ describe('PostsService', () => {
 
       newPost = new PostEntity({});
 
-      postBaseResponseDto = new PostBaseResponseDto({
+      postEntity = new PostEntity({
         userId,
         id: postId,
       });
 
-      mockPrismaService.post.findFirst.mockResolvedValue(postBaseResponseDto);
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(
-        postBaseResponseDto,
-      );
+      mockPrismaService.post.findFirst.mockResolvedValue(postEntity);
+      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('put update post', async () => {
@@ -183,7 +174,7 @@ describe('PostsService', () => {
 
       await expect(
         service.putUpdate(postId, userId, putUpdatePostDto),
-      ).resolves.toStrictEqual(postBaseResponseDto);
+      ).resolves.toStrictEqual(postEntity);
     });
   });
 
@@ -194,7 +185,7 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postBaseResponseDto: PostBaseResponseDto;
+    let postEntity: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
@@ -203,15 +194,13 @@ describe('PostsService', () => {
 
       newPost = new PostEntity({});
 
-      postBaseResponseDto = new PostBaseResponseDto({
+      postEntity = new PostEntity({
         userId,
         id: postId,
       });
 
-      mockPrismaService.post.findFirst.mockResolvedValue(postBaseResponseDto);
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(
-        postBaseResponseDto,
-      );
+      mockPrismaService.post.findFirst.mockResolvedValue(postEntity);
+      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('patch update post', async () => {
@@ -219,7 +208,7 @@ describe('PostsService', () => {
 
       await expect(
         service.patchUpdate(postId, userId, patchUpdatePostDto),
-      ).resolves.toStrictEqual(postBaseResponseDto);
+      ).resolves.toStrictEqual(postEntity);
     });
   });
 
@@ -310,7 +299,7 @@ describe('PostsService', () => {
 
       let existPost: PostEntity;
 
-      let postBaseResponseDto: PostBaseResponseDto;
+      let postEntity: PostEntity;
 
       beforeEach(() => {
         postId = faker.datatype.number({ min: 1 });
@@ -319,7 +308,7 @@ describe('PostsService', () => {
 
         mockPrismaService.post.findFirst.mockResolvedValueOnce(existPost);
 
-        postBaseResponseDto = new PostBaseResponseDto();
+        postEntity = new PostEntity();
       });
 
       it('not found post throw error', async () => {
@@ -329,12 +318,10 @@ describe('PostsService', () => {
       });
 
       it('return post', async () => {
-        mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(
-          postBaseResponseDto,
-        );
+        mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
 
         await expect(service.findOne(postId)).resolves.toStrictEqual(
-          postBaseResponseDto,
+          postEntity,
         );
       });
     });

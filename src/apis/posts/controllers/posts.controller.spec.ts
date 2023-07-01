@@ -4,6 +4,7 @@ import { PostsController } from '@src/apis/posts/controllers/posts.controller';
 import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
+import { PostBaseResponseDto } from '@src/apis/posts/dto/post-base-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { PostsService } from '@src/apis/posts/services/posts.service';
@@ -60,12 +61,12 @@ describe('PostsController', () => {
   describe('findOne', () => {
     let postId: number;
 
-    let post: PostEntity;
+    let post: PostBaseResponseDto;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
 
-      post = new PostEntity();
+      post = new PostBaseResponseDto();
     });
 
     it('only routing and service method called', async () => {
@@ -80,13 +81,13 @@ describe('PostsController', () => {
     let user: UserEntity;
     let body: CreatePostBodyDto;
 
-    let post: PostEntity;
+    let post: PostBaseResponseDto;
 
     beforeEach(() => {
       user = new UserEntity();
       body = new CreatePostBodyDto();
 
-      post = new PostEntity();
+      post = new PostBaseResponseDto();
     });
 
     it('only routing and service method called', async () => {
@@ -102,14 +103,14 @@ describe('PostsController', () => {
     let user: UserEntity;
     let putUpdatePostDto: PutUpdatePostBodyDto;
 
-    let post: PostEntity;
+    let post: PostBaseResponseDto;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       user = new UserEntity();
       putUpdatePostDto = new PutUpdatePostBodyDto();
 
-      post = new PostEntity();
+      post = new PostBaseResponseDto();
     });
 
     it('only routing and service method called', async () => {
@@ -131,14 +132,14 @@ describe('PostsController', () => {
     let user: UserEntity;
     let patchUpdatePostDto: PatchUpdatePostBodyDto;
 
-    let post: PostEntity;
+    let post: PostBaseResponseDto;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       user = new UserEntity();
       patchUpdatePostDto = new PatchUpdatePostBodyDto();
 
-      post = new PostEntity();
+      post = new PostBaseResponseDto();
     });
 
     it('only routing and service method called', async () => {

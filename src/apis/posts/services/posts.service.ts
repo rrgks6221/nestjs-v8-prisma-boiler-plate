@@ -7,7 +7,6 @@ import { Post } from '@prisma/client';
 import { CreatePostBodyDto } from '@src/apis/posts/dto/create-post-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
-import { PostBaseResponseDto } from '@src/apis/posts/dto/post-base-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
@@ -15,12 +14,9 @@ import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/ht
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
 import { BaseService } from '@src/types/type';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-export class PostsService
-  implements BaseService<PostEntity, PostBaseResponseDto>
-{
+export class PostsService implements BaseService<PostEntity> {
   private readonly LIKE_SEARCH_FIELDS: (keyof Partial<PostEntity>)[] = [
     'title',
     'description',
@@ -57,10 +53,10 @@ export class PostsService
       totalCountQuery,
     ]);
 
-    return [plainToInstance(PostEntity, posts), count];
+    return [posts, count];
   }
 
-  async findOne(postId: number): Promise<PostBaseResponseDto> {
+  async findOne(postId: number): Promise<PostEntity> {
     const existPost = await this.prismaService.post.findFirst({
       select: {
         id: true,
@@ -86,7 +82,7 @@ export class PostsService
   async create(
     userId: number,
     createPostBodyDto: CreatePostBodyDto,
-  ): Promise<PostBaseResponseDto> {
+  ): Promise<PostEntity> {
     const newPost = await this.prismaService.post.create({
       select: {
         id: true,
@@ -105,7 +101,7 @@ export class PostsService
     postId: number,
     userId: number,
     putUpdatePostDto: PutUpdatePostBodyDto,
-  ): Promise<PostBaseResponseDto> {
+  ): Promise<PostEntity> {
     await this.checkOwner(postId, userId);
 
     const newPost = await this.prismaService.post.update({
@@ -128,7 +124,7 @@ export class PostsService
     postId: number,
     userId: number,
     patchUpdatePostDto: PatchUpdatePostBodyDto,
-  ): Promise<PostBaseResponseDto> {
+  ): Promise<PostEntity> {
     await this.checkOwner(postId, userId);
 
     const newPost = await this.prismaService.post.update({
@@ -194,15 +190,11 @@ export class PostsService
     return existPost;
   }
 
-  private async buildBaseResponse(
-    postId: number,
-  ): Promise<PostBaseResponseDto> {
-    const post = await this.prismaService.post.findUniqueOrThrow({
+  private async buildBaseResponse(postId: number): Promise<PostEntity> {
+    return this.prismaService.post.findUniqueOrThrow({
       where: {
         id: postId,
       },
     });
-
-    return new PostBaseResponseDto(post);
   }
 }

@@ -34,6 +34,12 @@ export class MockPostsService implements MockClass<PostsService> {
 }
 
 export class MockAuthService implements MockClass<AuthService> {
+  signUp = jest.fn();
+  signIn = jest.fn();
+  generateAccessToken = jest.fn();
+  generateRefreshToken = jest.fn();
+  setAuthToken = jest.fn();
+  clearAuthToken = jest.fn();
   createAccessToken = jest.fn();
   login = jest.fn();
 }

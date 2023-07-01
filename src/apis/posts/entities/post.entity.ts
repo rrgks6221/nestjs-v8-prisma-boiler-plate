@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Post as PostModel } from '@prisma/client';
+import { Post } from '@prisma/client';
 import { BaseEntity } from '@src/entities/base.entity';
 
-export class PostEntity extends BaseEntity implements PostModel {
+export class PostEntity extends BaseEntity implements Post {
   @ApiProperty({
     description: 'user 고유 ID',
     type: 'integer',
