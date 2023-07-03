@@ -92,12 +92,6 @@ export class AuthService {
     return existUser;
   }
 
-  createAccessToken(id: number): string {
-    const payload = { id };
-
-    return this.jwtService.sign(payload);
-  }
-
   generateAccessToken(id: number): Promise<string> {
     return this.jwtService.signAsync(
       {

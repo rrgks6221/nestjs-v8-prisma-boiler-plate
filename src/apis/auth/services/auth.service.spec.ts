@@ -5,7 +5,7 @@ import { AuthService } from '@src/apis/auth/services/auth.service';
 import { MockJwtService } from '@test/mock/services.mock';
 
 describe('AuthService', () => {
-  let authService: AuthService;
+  let service: AuthService;
   let mockJwtService: MockJwtService;
 
   beforeEach(async () => {
@@ -19,12 +19,12 @@ describe('AuthService', () => {
       ],
     }).compile();
 
-    authService = module.get<AuthService>(AuthService);
+    service = module.get<AuthService>(AuthService);
     mockJwtService = module.get(JwtService);
   });
 
   it('should be defined', () => {
-    expect(authService).toBeDefined();
+    expect(service).toBeDefined();
   });
 
   describe('createAccessToken', () => {
@@ -37,29 +37,9 @@ describe('AuthService', () => {
     });
 
     it('토큰 생성 성공', () => {
-      mockJwtService.sign.mockReturnValue(randomValue);
+      mockJwtService.signAsync.mockResolvedValue(randomValue);
 
-      const result = authService.createAccessToken(id);
-
-      expect(result).toBe(randomValue);
-    });
-  });
-
-  describe('login', () => {
-    let id: number;
-    let randomValue: string;
-
-    beforeEach(() => {
-      id = faker.datatype.number();
-      randomValue = faker.datatype.string();
-    });
-
-    it('토큰 생성 성공', () => {
-      mockJwtService.sign.mockReturnValue(randomValue);
-
-      const result = authService.login(id);
-
-      expect(result).toBe(randomValue);
+      expect(service.generateAccessToken(id)).resolves.toBe(randomValue);
     });
   });
 

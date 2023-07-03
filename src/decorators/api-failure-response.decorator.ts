@@ -40,11 +40,7 @@ export const ApiFailureResponse = (
           messages: {
             type: 'array',
             description: '디테일한 메시지',
-            example: [
-              "id {number} doesn't exist",
-              'Validation failed (positive numeric string is expected)',
-              'id must be an integer number',
-            ],
+            example: ['디테일한 메시지'],
             items: {
               type: 'string',
             },

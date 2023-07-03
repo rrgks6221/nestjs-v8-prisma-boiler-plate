@@ -97,7 +97,7 @@ export class AuthController {
   @Post('access-token/:userId')
   createAccessTokenForDevelop(
     @Param('userId', ParsePositiveIntPipe) userId: number,
-  ): string {
-    return this.authService.createAccessToken(userId);
+  ): Promise<string> {
+    return this.authService.generateAccessToken(userId);
   }
 }

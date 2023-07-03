@@ -20,8 +20,15 @@ export class MockHealthCheckService
 }
 
 export class MockUserService implements MockClass<UsersService> {
-  create = jest.fn();
+  findAllAndCount = jest.fn();
   findOne = jest.fn();
+  findOneBy = jest.fn();
+  patchUpdate = jest.fn();
+  putUpdate = jest.fn();
+  remove = jest.fn();
+  buildBaseResponse = jest.fn();
+  create = jest.fn();
+  findOneOrNotFound = jest.fn();
 }
 
 export class MockPostsService implements MockClass<PostsService> {
