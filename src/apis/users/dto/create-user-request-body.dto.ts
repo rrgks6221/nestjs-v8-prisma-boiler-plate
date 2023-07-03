@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { LoginType } from '@prisma/client';
-import { IsRecord } from '@src/decorators/is-record.decorator';
+import { IsNotEmptyString } from '@src/decorators/is-not-empty-string.decorator';
 import { IsEmail, IsEnum, IsString } from 'class-validator';
 
 export class CreateUserRequestBodyDto {
@@ -13,28 +13,23 @@ export class CreateUserRequestBodyDto {
 
   @ApiProperty({
     example: 'password',
-    description: 'users password',
-    type: 'string',
+    description: 'user password',
   })
   @IsString()
   password: string;
 
   @ApiProperty({
     example: 'example@example.com',
-    description: 'users email',
-    required: true,
-    type: 'string',
+    description: 'user email',
+    format: 'email',
   })
   @IsEmail()
-  @IsRecord({ model: 'user' }, false)
   email: string;
 
   @ApiProperty({
     example: '홍길동',
-    description: 'users 이름',
-    required: true,
-    type: 'string',
+    description: 'user 닉네임',
   })
-  @IsString()
+  @IsNotEmptyString()
   nickname: string;
 }

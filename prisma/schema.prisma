@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum LoginType {
   EMAIL
   KAKAO
@@ -30,7 +29,7 @@ model User {
   // email
   email     String    @unique @db.VarChar(255)
   // nickname
-  nickname  String    @db.VarChar(255)
+  nickname  String    @unique @db.VarChar(255)
   /// 생성일자
   createdAt DateTime  @default(now()) @db.Timestamp(6)
   /// 수정일자
