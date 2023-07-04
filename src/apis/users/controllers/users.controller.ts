@@ -37,7 +37,7 @@ import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
 import { BaseController } from '@src/types/type';
 import { plainToInstance } from 'class-transformer';
 
-@ApiTags('유저')
+@ApiTags('users')
 @Controller('api/users')
 export class UsersController
   implements Omit<BaseController<UserModel, UserBaseResponseDto>, 'create'>

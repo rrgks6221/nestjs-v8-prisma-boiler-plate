@@ -76,11 +76,9 @@ async function bootstrap() {
     app.enableCors({ origin: true, credentials: true });
 
     const config = new DocumentBuilder()
-      .setTitle('title example')
-      .setDescription('description example')
+      .setTitle('nestjs boiler plate')
+      .setDescription('nestjs boiler plate')
       .setVersion('1.0')
-      .addTag('tag example')
-      .addBearerAuth()
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
