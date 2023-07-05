@@ -9,6 +9,7 @@ import {
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from '@src/apis/auth/controllers/auth.controller';
+import { AuthHelper } from '@src/apis/auth/helpers/auth.helper';
 import { JwtRefreshStrategy } from '@src/apis/auth/jwt/jwt-refresh.strategy';
 import { JwtStrategy } from '@src/apis/auth/jwt/jwt.strategy';
 import { AuthService } from '@src/apis/auth/services/auth.service';
@@ -45,6 +46,7 @@ import { RedisClientOptions } from 'redis';
     JwtStrategy,
     JwtRefreshStrategy,
     PrismaService,
+    AuthHelper,
     {
       provide: BCRYPT_TOKEN,
       useValue: bcrypt,

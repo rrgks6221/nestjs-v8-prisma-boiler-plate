@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginType } from '@prisma/client';
-import { JWT_TOKEN_TYPE } from '@src/apis/auth/constants/auth.constant';
 import { SignInDto } from '@src/apis/auth/dtos/sign-in.dto';
+import { AuthHelper } from '@src/apis/auth/helpers/auth.helper';
 import { AuthToken } from '@src/apis/auth/types/auth.type';
 import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
@@ -31,6 +31,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
+    private readonly authHelper: AuthHelper,
     @Inject(BCRYPT_TOKEN)
     private readonly encryption: typeof bcrypt,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
@@ -133,7 +134,7 @@ export class AuthService {
   ): Promise<void> {
     const { accessToken, refreshToken } = authToken;
 
-    res.cookie('access_token', this.setTokenType(accessToken), {
+    res.cookie('access_token', this.authHelper.getBearerToken(accessToken), {
       httpOnly: true,
       secure: !this.appConfigService.isLocal(),
       expires: new Date(
@@ -143,7 +144,7 @@ export class AuthService {
           ),
       ),
     });
-    res.cookie('refresh_token', this.setTokenType(refreshToken), {
+    res.cookie('refresh_token', this.authHelper.getBearerToken(refreshToken), {
       httpOnly: true,
       secure: !this.appConfigService.isLocal(),
       expires: new Date(
@@ -155,7 +156,7 @@ export class AuthService {
     });
 
     await this.cacheManager.set(
-      this.getRefreshKeyInStore(userId),
+      this.authHelper.getRefreshKeyInStore(userId),
       refreshToken,
       {
         ttl:
@@ -170,14 +171,6 @@ export class AuthService {
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
 
-    await this.cacheManager.del(this.getRefreshKeyInStore(userId));
-  }
-
-  private getRefreshKeyInStore(userId: number): string {
-    return 'refreshUserId' + ':' + String(userId);
-  }
-
-  private setTokenType(token: string): string {
-    return JWT_TOKEN_TYPE + ' ' + token;
+    await this.cacheManager.del(this.authHelper.getRefreshKeyInStore(userId));
   }
 }
