@@ -25,14 +25,11 @@ import { PutUpdateUserBodyDto } from '@src/apis/users/dto/put-update-user.dto';
 import { UserBaseResponseDto } from '@src/apis/users/dto/user-base-response.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
-import { ModelName } from '@src/constants/enum';
-import { SetModelNameToParam } from '@src/decorators/set-model-name-to-param.decorator';
 import {
   ResponseType,
   SetResponse,
 } from '@src/decorators/set-response.decorator';
 import { User } from '@src/decorators/user.decorator';
-import { IdRequestParamDto } from '@src/dtos/id-request-param.dto';
 import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
 import { BaseController } from '@src/types/type';
 import { plainToInstance } from 'class-transformer';
@@ -59,11 +56,11 @@ export class UsersController
 
   @ApiFindOne('유저 단일 조회')
   @SetResponse({ key: 'user', type: ResponseType.Base })
-  @Get(':id')
+  @Get(':userId')
   async findOne(
-    @Param() @SetModelNameToParam(ModelName.User) param: IdRequestParamDto,
+    @Param('userId', ParsePositiveIntPipe) userId: number,
   ): Promise<UserBaseResponseDto> {
-    const existUser = await this.userService.findOne(param.id);
+    const existUser = await this.userService.findOne(userId);
 
     const response = await this.userService.buildBaseResponse(existUser.id);
 

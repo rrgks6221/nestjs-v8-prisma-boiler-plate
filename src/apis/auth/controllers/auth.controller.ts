@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   Res,
@@ -68,7 +69,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('sign-out')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(
     @Res({ passthrough: true }) res: Response,
     @User() user: UserEntity,
@@ -77,11 +78,12 @@ export class AuthController {
   }
 
   @UseGuards(RefreshAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('refresh')
   async refresh(
     @User() user: UserEntity,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<UserEntity> {
+  ): Promise<void> {
     const accessToken = await this.authService.generateAccessToken(user.id);
     const refreshToken = await this.authService.generateRefreshToken(user.id);
 
@@ -89,8 +91,6 @@ export class AuthController {
       accessToken,
       refreshToken,
     });
-
-    return user;
   }
 
   @ApiOperation({ summary: '개발용으로 생성된 엑세스 토큰 생성 api' })

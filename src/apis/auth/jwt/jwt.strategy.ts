@@ -1,5 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { JWT_TOKEN_TYPE } from '@src/apis/auth/constants/auth.constant';
+import { Payload } from '@src/apis/auth/types/auth.type';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ENV_KEY } from '@src/core/app-config/constants/api-config.constant';
@@ -16,10 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly prismaService: PrismaService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        JwtStrategy.extractJWT,
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ]),
+      jwtFromRequest: ExtractJwt.fromExtractors([JwtStrategy.extractJWT]),
       ignoreExpiration: false,
       secretOrKey: appConfigService.get<string>(
         ENV_KEY.JWT_ACCESS_TOKEN_SECRET,
@@ -27,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: Payload) {
     const existUser: UserEntity | null =
       await this.prismaService.user.findUnique({
         where: {
@@ -48,9 +47,37 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   private static extractJWT(req: Request): string | null {
-    if (req.cookies && 'access_token' in req.cookies) {
-      return req.cookies.access_token;
+    const token = req.cookies?.access_token;
+
+    if (!token) {
+      throw new UnauthorizedException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE004,
+          message: 'this token is invalid',
+        }),
+      );
     }
-    return null;
+
+    const [type, accessToken] = token.split(' ');
+
+    if (type !== JWT_TOKEN_TYPE) {
+      throw new UnauthorizedException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE004,
+          message: 'this token is invalid',
+        }),
+      );
+    }
+
+    if (!accessToken) {
+      throw new UnauthorizedException(
+        HttpExceptionHelper.createError({
+          code: ERROR_CODE.CODE004,
+          message: 'this token is invalid',
+        }),
+      );
+    }
+
+    return accessToken;
   }
 }

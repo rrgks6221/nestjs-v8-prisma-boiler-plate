@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginType } from '@prisma/client';
+import { JWT_TOKEN_TYPE } from '@src/apis/auth/constants/auth.constant';
 import { SignInDto } from '@src/apis/auth/dtos/sign-in.dto';
 import { AuthToken } from '@src/apis/auth/types/auth.type';
 import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
@@ -134,7 +135,7 @@ export class AuthService {
   ): Promise<void> {
     const { accessToken, refreshToken } = authToken;
 
-    res.cookie('access_token', accessToken, {
+    res.cookie('access_token', this.setTokenType(accessToken), {
       httpOnly: true,
       secure: !this.appConfigService.isLocal(),
       expires: new Date(
@@ -144,7 +145,7 @@ export class AuthService {
           ),
       ),
     });
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie('refresh_token', this.setTokenType(refreshToken), {
       httpOnly: true,
       secure: !this.appConfigService.isLocal(),
       expires: new Date(
@@ -176,5 +177,9 @@ export class AuthService {
 
   private getRefreshKeyInStore(userId: number): string {
     return 'refreshUserId' + ':' + String(userId);
+  }
+
+  private setTokenType(token: string): string {
+    return JWT_TOKEN_TYPE + ' ' + token;
   }
 }
