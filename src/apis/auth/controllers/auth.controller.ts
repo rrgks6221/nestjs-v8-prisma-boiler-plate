@@ -18,7 +18,8 @@ import {
   ApiSignOut,
   ApiSignUp,
 } from '@src/apis/auth/controllers/auth.swagger';
-import { SignInDto } from '@src/apis/auth/dtos/sign-in.dto';
+import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
+import { SignUpRequestBodyDto } from '@src/apis/auth/dtos/sign-up-request-body.dto';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
 import { RefreshAuthGuard } from '@src/apis/auth/guards/refresh-auth-guard.guard';
 import { AuthService } from '@src/apis/auth/services/auth.service';
@@ -51,18 +52,20 @@ export class AuthController {
   @Post('sign-up')
   async signUp(
     @Res({ passthrough: true }) res: Response,
-    @Body() createUserRequestBodyDto: CreateUserRequestBodyDto,
+    @Body() signUpRequestBodyDto: SignUpRequestBodyDto,
   ): Promise<UserBaseResponseDto> {
-    const user = await this.authService.signUp(createUserRequestBodyDto);
-    const accessToken = await this.authService.generateAccessToken(user.id);
-    const refreshToken = await this.authService.generateRefreshToken(user.id);
+    const newUser = await this.authService.signUp(signUpRequestBodyDto);
+    const accessToken = await this.authService.generateAccessToken(newUser.id);
+    const refreshToken = await this.authService.generateRefreshToken(
+      newUser.id,
+    );
 
-    await this.authService.setAuthToken(res, user.id, {
+    await this.authService.setAuthToken(res, newUser.id, {
       accessToken,
       refreshToken,
     });
 
-    return new UserBaseResponseDto(user);
+    return new UserBaseResponseDto(newUser);
   }
 
   @ApiSignIn('로그인')
@@ -70,9 +73,9 @@ export class AuthController {
   @Post('sign-in')
   async signIn(
     @Res({ passthrough: true }) res: Response,
-    @Body() signInDto: SignInDto,
+    @Body() signInDtoRequestBody: SignInDtoRequestBody,
   ): Promise<UserBaseResponseDto> {
-    const user = await this.authService.signIn(signInDto);
+    const user = await this.authService.signIn(signInDtoRequestBody);
     const accessToken = await this.authService.generateAccessToken(user.id);
     const refreshToken = await this.authService.generateRefreshToken(user.id);
 

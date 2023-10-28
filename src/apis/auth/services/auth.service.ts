@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginType } from '@prisma/client';
-import { SignInDto } from '@src/apis/auth/dtos/sign-in.dto';
+import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
 import { AuthHelper } from '@src/apis/auth/helpers/auth.helper';
 import { AuthToken } from '@src/apis/auth/types/auth.type';
 import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
@@ -49,7 +49,7 @@ export class AuthService {
     return newUser;
   }
 
-  async signIn(signInDto: SignInDto): Promise<UserEntity> {
+  async signIn(signInDto: SignInDtoRequestBody): Promise<UserEntity> {
     const existUser = await this.prismaService.user.findFirst({
       where: {
         email: signInDto.email,
