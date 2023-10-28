@@ -70,10 +70,10 @@ describe('PostsController', () => {
     });
 
     it('only routing and service method called', async () => {
-      mockPostsService.findOne.mockResolvedValue(post);
+      mockPostsService.findOneOrNotFound.mockResolvedValue(post);
 
       await expect(controller.findOne(postId)).resolves.toStrictEqual(post);
-      expect(mockPostsService.findOne).toBeCalledWith(postId);
+      expect(mockPostsService.findOneOrNotFound).toBeCalledWith(postId);
     });
   });
 

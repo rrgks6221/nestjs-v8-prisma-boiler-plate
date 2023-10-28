@@ -23,4 +23,18 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('findAllAndCount', () => {});
+
+  describe('findOne', () => {});
+
+  describe('patchUpdate', () => {});
+
+  describe('putUpdate', () => {});
+
+  describe('remove', () => {});
 });

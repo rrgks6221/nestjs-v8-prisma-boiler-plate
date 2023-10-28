@@ -38,14 +38,20 @@ export class PostsService implements BaseService<PostEntity> {
     );
 
     const postsQuery = this.prismaService.post.findMany({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       orderBy,
       skip: page * pageSize,
       take: pageSize,
     });
 
     const totalCountQuery = this.prismaService.post.count({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
     });
 
     const [posts, count] = await this.prismaService.$transaction([
@@ -56,11 +62,8 @@ export class PostsService implements BaseService<PostEntity> {
     return [posts, count];
   }
 
-  async findOne(postId: number): Promise<PostEntity> {
+  async findOneOrNotFound(postId: number): Promise<PostEntity> {
     const existPost = await this.prismaService.post.findFirst({
-      select: {
-        id: true,
-      },
       where: {
         id: postId,
         deletedAt: null,
@@ -76,25 +79,20 @@ export class PostsService implements BaseService<PostEntity> {
       );
     }
 
-    return this.buildBaseResponse(existPost.id);
+    return existPost;
   }
 
-  async create(
+  create(
     userId: number,
     createPostBodyDto: CreatePostRequestBodyDto,
   ): Promise<PostEntity> {
-    const newPost = await this.prismaService.post.create({
-      select: {
-        id: true,
-      },
+    return this.prismaService.post.create({
       data: {
         title: createPostBodyDto.title,
         description: createPostBodyDto.description,
         userId: userId,
       },
     });
-
-    return this.buildBaseResponse(newPost.id);
   }
 
   async putUpdate(
@@ -104,10 +102,7 @@ export class PostsService implements BaseService<PostEntity> {
   ): Promise<PostEntity> {
     await this.checkOwner(postId, userId);
 
-    const newPost = await this.prismaService.post.update({
-      select: {
-        id: true,
-      },
+    return this.prismaService.post.update({
       where: {
         id: postId,
       },
@@ -116,8 +111,6 @@ export class PostsService implements BaseService<PostEntity> {
         description: putUpdatePostDto.description,
       },
     });
-
-    return this.buildBaseResponse(newPost.id);
   }
 
   async patchUpdate(
@@ -127,19 +120,12 @@ export class PostsService implements BaseService<PostEntity> {
   ): Promise<PostEntity> {
     await this.checkOwner(postId, userId);
 
-    const newPost = await this.prismaService.post.update({
-      select: {
-        id: true,
-      },
+    return this.prismaService.post.update({
       where: {
         id: postId,
       },
-      data: {
-        description: patchUpdatePostDto.description,
-      },
+      data: patchUpdatePostDto,
     });
-
-    return this.buildBaseResponse(newPost.id);
   }
 
   async remove(postId: number, userId: number): Promise<number> {
@@ -155,6 +141,17 @@ export class PostsService implements BaseService<PostEntity> {
     });
 
     return Number(!!removedPost);
+  }
+
+  async buildBaseResponse(postId: number): Promise<PostEntity> {
+    const existPost = await this.prismaService.post.findFirstOrThrow({
+      where: {
+        id: postId,
+        deletedAt: null,
+      },
+    });
+
+    return new PostEntity(existPost);
   }
 
   private async checkOwner(postId: number, userId: number) {
@@ -188,13 +185,5 @@ export class PostsService implements BaseService<PostEntity> {
     }
 
     return existPost;
-  }
-
-  private async buildBaseResponse(postId: number): Promise<PostEntity> {
-    return this.prismaService.post.findUniqueOrThrow({
-      where: {
-        id: postId,
-      },
-    });
   }
 }

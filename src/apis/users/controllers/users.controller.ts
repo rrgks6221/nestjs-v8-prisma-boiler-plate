@@ -60,7 +60,7 @@ export class UsersController
   async findOne(
     @Param('userId', ParsePositiveIntPipe) userId: number,
   ): Promise<UserBaseResponseDto> {
-    const existUser = await this.userService.findOne(userId);
+    const existUser = await this.userService.findOneOrNotFound(userId);
 
     const response = await this.userService.buildBaseResponse(existUser.id);
 

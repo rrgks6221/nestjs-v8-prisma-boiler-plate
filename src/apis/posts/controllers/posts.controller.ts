@@ -65,9 +65,11 @@ export class PostsController
   async findOne(
     @Param('postId', ParsePositiveIntPipe) postId: number,
   ): Promise<PostBaseResponseDto> {
-    const post = await this.postService.findOne(postId);
+    const post = await this.postService.findOneOrNotFound(postId);
 
-    return new PostBaseResponseDto(post);
+    const response = await this.postService.buildBaseResponse(post.id);
+
+    return new PostBaseResponseDto(response);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -80,7 +82,9 @@ export class PostsController
   ): Promise<PostBaseResponseDto> {
     const newPost = await this.postService.create(user.id, createPostBodyDto);
 
-    return new PostBaseResponseDto(newPost);
+    const response = await this.postService.buildBaseResponse(newPost.id);
+
+    return new PostBaseResponseDto(response);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -98,7 +102,9 @@ export class PostsController
       putUpdatePostDto,
     );
 
-    return new PostBaseResponseDto(updatedPost);
+    const response = await this.postService.buildBaseResponse(updatedPost.id);
+
+    return new PostBaseResponseDto(response);
   }
 
   @ApiPatchUpdate('post 부분 수정')
@@ -116,7 +122,9 @@ export class PostsController
       patchUpdatePostDto,
     );
 
-    return new PostBaseResponseDto(updatedPost);
+    const response = await this.postService.buildBaseResponse(updatedPost.id);
+
+    return new PostBaseResponseDto(response);
   }
 
   @ApiRemove('post 삭제')

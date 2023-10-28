@@ -16,7 +16,7 @@ export interface BaseController<Model, BaseResponse> {
 
 export interface BaseService<M> {
   findAllAndCount(...args: unknown[]): Promise<[M[], number]>;
-  findOne(...args: unknown[]): Promise<M>;
+  findOneOrNotFound(...args: unknown[]): Promise<M>;
   create(...args: unknown[]): Promise<M>;
   putUpdate(...args: unknown[]): Promise<M>;
   patchUpdate(...args: unknown[]): Promise<M>;

@@ -86,7 +86,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('findOne', () => {
+  describe('findOneOrNotFound', () => {
     let postId: number;
     let existPost: PostEntity;
 
@@ -95,16 +95,12 @@ describe('PostsService', () => {
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       existPost = new PostEntity();
-
-      postEntity = new PostEntity();
-
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('post is not found', async () => {
       mockPrismaService.post.findFirst.mockResolvedValue(null);
 
-      await expect(service.findOne(postId)).rejects.toThrowError(
+      await expect(service.findOneOrNotFound(postId)).rejects.toThrowError(
         NotFoundException,
       );
     });
@@ -112,7 +108,9 @@ describe('PostsService', () => {
     it('find one post', async () => {
       mockPrismaService.post.findFirst.mockResolvedValue(existPost);
 
-      await expect(service.findOne(postId)).resolves.toStrictEqual(postEntity);
+      await expect(service.findOneOrNotFound(postId)).resolves.toStrictEqual(
+        existPost,
+      );
     });
   });
 
@@ -122,17 +120,11 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postEntity: PostEntity;
-
     beforeEach(() => {
       userId = faker.datatype.number({ min: 1 });
       createPostBodyDto = new CreatePostRequestBodyDto();
 
       newPost = new PostEntity();
-
-      postEntity = new PostEntity();
-
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
     });
 
     it('create new post', async () => {
@@ -140,7 +132,7 @@ describe('PostsService', () => {
 
       await expect(
         service.create(userId, createPostBodyDto),
-      ).resolves.toStrictEqual(postEntity);
+      ).resolves.toStrictEqual(newPost);
     });
   });
 
@@ -151,22 +143,24 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postEntity: PostEntity;
+    let existPost: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       userId = faker.datatype.number({ min: 1 });
       putUpdatePostDto = new PutUpdatePostBodyDto();
 
-      newPost = new PostEntity({});
-
-      postEntity = new PostEntity({
+      newPost = new PostEntity({
         userId,
         id: postId,
       });
 
-      mockPrismaService.post.findFirst.mockResolvedValue(postEntity);
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
+      existPost = new PostEntity({
+        userId,
+        id: postId,
+      });
+
+      mockPrismaService.post.findFirst.mockResolvedValue(existPost);
     });
 
     it('put update post', async () => {
@@ -174,7 +168,7 @@ describe('PostsService', () => {
 
       await expect(
         service.putUpdate(postId, userId, putUpdatePostDto),
-      ).resolves.toStrictEqual(postEntity);
+      ).resolves.toStrictEqual(newPost);
     });
   });
 
@@ -185,22 +179,24 @@ describe('PostsService', () => {
 
     let newPost: PostEntity;
 
-    let postEntity: PostEntity;
+    let existPost: PostEntity;
 
     beforeEach(() => {
       postId = faker.datatype.number({ min: 1 });
       userId = faker.datatype.number({ min: 1 });
       patchUpdatePostDto = new PatchUpdatePostBodyDto();
 
-      newPost = new PostEntity({});
-
-      postEntity = new PostEntity({
+      existPost = new PostEntity({
         userId,
         id: postId,
       });
 
-      mockPrismaService.post.findFirst.mockResolvedValue(postEntity);
-      mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
+      newPost = new PostEntity({
+        userId,
+        id: postId,
+      });
+
+      mockPrismaService.post.findFirst.mockResolvedValue(existPost);
     });
 
     it('patch update post', async () => {
@@ -208,7 +204,7 @@ describe('PostsService', () => {
 
       await expect(
         service.patchUpdate(postId, userId, patchUpdatePostDto),
-      ).resolves.toStrictEqual(postEntity);
+      ).resolves.toStrictEqual(newPost);
     });
   });
 
@@ -240,6 +236,28 @@ describe('PostsService', () => {
       mockPrismaService.post.update.mockResolvedValue(deletedPost);
 
       await expect(service.remove(postId, userId)).resolves.toBe(1);
+    });
+  });
+
+  describe('buildBaseResponse', () => {
+    let postId: number;
+
+    let postEntity: PostEntity;
+
+    beforeEach(() => {
+      postId = faker.datatype.number({ min: 1 });
+
+      postEntity = new PostEntity();
+
+      mockPrismaService.post.findFirstOrThrow.mockResolvedValueOnce(postEntity);
+    });
+
+    it('return post', async () => {
+      mockPrismaService.post.findFirstOrThrow.mockResolvedValue(postEntity);
+
+      await expect(service.buildBaseResponse(postId)).resolves.toEqual(
+        postEntity,
+      );
     });
   });
 
@@ -291,38 +309,6 @@ describe('PostsService', () => {
         mockPrismaService.post.findFirst.mockResolvedValue(existPost);
 
         await expect(service.remove(postId, userId)).resolves.toBe(1);
-      });
-    });
-
-    describe('buildBaseResponse with findOne', () => {
-      let postId: number;
-
-      let existPost: PostEntity;
-
-      let postEntity: PostEntity;
-
-      beforeEach(() => {
-        postId = faker.datatype.number({ min: 1 });
-
-        existPost = new PostEntity();
-
-        mockPrismaService.post.findFirst.mockResolvedValueOnce(existPost);
-
-        postEntity = new PostEntity();
-      });
-
-      it('not found post throw error', async () => {
-        mockPrismaService.post.findUniqueOrThrow.mockRejectedValue(new Error());
-
-        await expect(service.findOne(postId)).rejects.toThrow();
-      });
-
-      it('return post', async () => {
-        mockPrismaService.post.findUniqueOrThrow.mockResolvedValue(postEntity);
-
-        await expect(service.findOne(postId)).resolves.toStrictEqual(
-          postEntity,
-        );
       });
     });
   });

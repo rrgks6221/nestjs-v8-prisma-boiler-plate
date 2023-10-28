@@ -65,7 +65,7 @@ export class UsersService implements BaseService<UserEntity> {
     return [users, count];
   }
 
-  async findOne(userId: number): Promise<UserEntity> {
+  async findOneOrNotFound(userId: number): Promise<UserEntity> {
     const existUser = await this.prismaService.user.findFirst({
       where: {
         id: userId,
@@ -115,7 +115,7 @@ export class UsersService implements BaseService<UserEntity> {
     loggedInUserId: number,
     patchUpdateUserBodyDto: PatchUpdateUserBodyDto,
   ): Promise<UserEntity> {
-    await this.findOne(userId);
+    await this.findOneOrNotFound(userId);
 
     this.checkOwn(userId, loggedInUserId);
 
@@ -142,7 +142,7 @@ export class UsersService implements BaseService<UserEntity> {
     loggedInUserId: number,
     putUpdateUserBodyDto: PutUpdateUserBodyDto,
   ): Promise<UserEntity> {
-    await this.findOne(userId);
+    await this.findOneOrNotFound(userId);
 
     this.checkOwn(userId, loggedInUserId);
 
@@ -160,7 +160,7 @@ export class UsersService implements BaseService<UserEntity> {
   }
 
   async remove(userId: number, loggedInUserId: number): Promise<number> {
-    await this.findOne(userId);
+    await this.findOneOrNotFound(userId);
 
     this.checkOwn(userId, loggedInUserId);
 

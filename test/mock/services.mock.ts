@@ -34,10 +34,11 @@ export class MockUserService implements MockClass<UsersService> {
 export class MockPostsService implements MockClass<PostsService> {
   findAllAndCount = jest.fn();
   create = jest.fn();
-  findOne = jest.fn();
+  findOneOrNotFound = jest.fn();
   putUpdate = jest.fn();
   patchUpdate = jest.fn();
   remove = jest.fn();
+  buildBaseResponse = jest.fn();
 }
 
 export class MockAuthService implements MockClass<AuthService> {
