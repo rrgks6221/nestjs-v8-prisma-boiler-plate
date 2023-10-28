@@ -4,7 +4,6 @@ import { AuthController } from '@src/apis/auth/controllers/auth.controller';
 import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
 import { SignUpRequestBodyDto } from '@src/apis/auth/dtos/sign-up-request-body.dto';
 import { AuthService } from '@src/apis/auth/services/auth.service';
-import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { UserBaseResponseDto } from '@src/apis/users/dto/user-base-response.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { MockAuthService } from '@test/mock/services.mock';

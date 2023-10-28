@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '@src/apis/auth/services/auth.service';
 import { UsersService } from '@src/apis/users/services/users.service';
 import { PrismaService } from '@src/core/prisma/prisma.service';
+import { QueryHelper } from '@src/helpers/query.helper';
+import { MockQueryHelper } from '@test/mock/helper.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 import { MockAuthService } from '@test/mock/services.mock';
 
@@ -19,6 +21,10 @@ describe('UsersService', () => {
         {
           provide: PrismaService,
           useValue: mockPrismaService,
+        },
+        {
+          provide: QueryHelper,
+          useClass: MockQueryHelper,
         },
       ],
     }).compile();
