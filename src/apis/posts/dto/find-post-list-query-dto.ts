@@ -1,6 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Post } from '@prisma/client';
-import { POST_ORDER_FIELD } from '@src/apis/posts/constants/post.constant';
+import {
+  POST_ORDER_FIELD,
+  POST_TITLE_LENGTH,
+} from '@src/apis/posts/constants/post.constant';
+import { SortOrder } from '@src/constants/enum';
 import { ApiPropertyOrderBy } from '@src/decorators/api-property-order-by.decorator';
 import {
   CsvToOrderBy,
@@ -29,10 +33,10 @@ export class FindPostListQueryDto extends PageDto implements Partial<Post> {
 
   @ApiPropertyOptional({
     description: 'title',
-    maxLength: 255,
+    maxLength: POST_TITLE_LENGTH.MAX,
   })
   @IsOptional()
-  @MaxLength(255)
+  @MaxLength(POST_TITLE_LENGTH.MAX)
   title?: string;
 
   @ApiPropertyOptional({
@@ -43,5 +47,6 @@ export class FindPostListQueryDto extends PageDto implements Partial<Post> {
 
   @ApiPropertyOrderBy(POST_ORDER_FIELD)
   @CsvToOrderBy<typeof POST_ORDER_FIELD>([...POST_ORDER_FIELD])
-  orderBy: OrderBy<typeof POST_ORDER_FIELD>;
+  @IsOptional()
+  orderBy: OrderBy<typeof POST_ORDER_FIELD> = { id: SortOrder.Desc };
 }

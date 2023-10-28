@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { POST_TITLE_LENGTH } from '@src/apis/posts/constants/post.constant';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { IsNotEmptyString } from '@src/decorators/is-not-empty-string.decorator';
 import { Length } from 'class-validator';
@@ -8,10 +9,10 @@ export class CreatePostRequestBodyDto
 {
   @ApiProperty({
     description: 'title',
-    minLength: 1,
-    maxLength: 255,
+    minLength: POST_TITLE_LENGTH.MIN,
+    maxLength: POST_TITLE_LENGTH.MAX,
   })
-  @Length(1, 255)
+  @Length(POST_TITLE_LENGTH.MIN, POST_TITLE_LENGTH.MAX)
   @IsNotEmptyString()
   title: string;
 

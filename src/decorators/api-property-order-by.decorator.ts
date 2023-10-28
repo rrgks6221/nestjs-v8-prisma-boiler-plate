@@ -13,6 +13,7 @@ export const ApiPropertyOrderBy = (
         '허용된 filed: ' +
         allowFields.join(' '),
       example: '-id,updatedAt',
+      default: 'id',
       type: String,
     }),
   );
