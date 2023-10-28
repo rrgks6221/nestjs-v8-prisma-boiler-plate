@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { LoginType, User } from '@prisma/client';
-import { POST_ORDER_FIELD } from '@src/apis/posts/constants/post.constant';
+import { USER_ORDER_FIELD } from '@src/apis/users/constants/user.constant';
+import { SortOrder } from '@src/constants/enum';
 import { ApiPropertyOrderBy } from '@src/decorators/api-property-order-by.decorator';
 import {
   CsvToOrderBy,
@@ -45,7 +46,8 @@ export class FindUserListRequestQueryDto
   @IsOptional()
   nickname?: string;
 
-  @ApiPropertyOrderBy(POST_ORDER_FIELD)
-  @CsvToOrderBy<typeof POST_ORDER_FIELD>([...POST_ORDER_FIELD])
-  orderBy: OrderBy<typeof POST_ORDER_FIELD>;
+  @ApiPropertyOrderBy(USER_ORDER_FIELD)
+  @CsvToOrderBy<typeof USER_ORDER_FIELD>([...USER_ORDER_FIELD])
+  @IsOptional()
+  orderBy: OrderBy<typeof USER_ORDER_FIELD> = { id: SortOrder.Desc };
 }

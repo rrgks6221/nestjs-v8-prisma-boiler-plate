@@ -4,6 +4,8 @@ export const POST_ORDER_FIELD: readonly (keyof Partial<Post>)[] = [
   'id',
   'title',
   'userId',
+  'createdAt',
+  'updatedAt',
 ] as const;
 
 export const POST_TITLE_LENGTH = {

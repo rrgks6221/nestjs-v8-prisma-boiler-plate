@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { LoginType } from '@prisma/client';
+import { USER_NICKNAME_LENGTH } from '@src/apis/users/constants/user.constant';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { BaseEntity } from '@src/entities/base.entity';
 import { Exclude } from 'class-transformer';
@@ -17,14 +18,13 @@ export class UserBaseResponseDto extends BaseEntity implements UserEntity {
   @ApiProperty({
     description: '이메일',
     format: 'email',
-    maxLength: 255,
   })
   email: string;
 
   @ApiProperty({
     description: '닉네임',
-    minLength: 1,
-    maxLength: 255,
+    minLength: USER_NICKNAME_LENGTH.MIN,
+    maxLength: USER_NICKNAME_LENGTH.MAX,
   })
   nickname: string;
 
