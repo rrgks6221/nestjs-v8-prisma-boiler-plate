@@ -8,10 +8,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginType } from '@prisma/client';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_NAME,
+} from '@src/apis/auth/constants/auth.constant';
 import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
+import { SignUpRequestBodyDto } from '@src/apis/auth/dtos/sign-up-request-body.dto';
 import { AuthHelper } from '@src/apis/auth/helpers/auth.helper';
 import { AuthToken } from '@src/apis/auth/types/auth.type';
-import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
@@ -38,23 +42,23 @@ export class AuthService {
   ) {}
 
   async signUp(
-    createUserRequestBodyDto: CreateUserRequestBodyDto,
+    signUpRequestBodyDto: SignUpRequestBodyDto,
   ): Promise<UserEntity> {
-    createUserRequestBodyDto.password = await this.encryption.hash(
-      createUserRequestBodyDto.password,
+    signUpRequestBodyDto.password = await this.encryption.hash(
+      signUpRequestBodyDto.password,
       10,
     );
-    const newUser = await this.usersService.create(createUserRequestBodyDto);
+    const newUser = await this.usersService.create(signUpRequestBodyDto);
 
     return newUser;
   }
 
-  async signIn(signInDto: SignInDtoRequestBody): Promise<UserEntity> {
-    const existUser = await this.prismaService.user.findFirst({
-      where: {
-        email: signInDto.email,
-        loginType: LoginType.EMAIL,
-      },
+  async signIn(
+    signInDtoRequestBody: SignInDtoRequestBody,
+  ): Promise<UserEntity> {
+    const existUser = await this.usersService.findOneBy({
+      email: signInDtoRequestBody.email,
+      loginType: LoginType.EMAIL,
     });
 
     if (!existUser) {
@@ -76,7 +80,7 @@ export class AuthService {
     }
 
     const isComparePassword = await this.encryption.compare(
-      signInDto.password,
+      signInDtoRequestBody.password,
       existUser.password,
     );
 
@@ -134,26 +138,34 @@ export class AuthService {
   ): Promise<void> {
     const { accessToken, refreshToken } = authToken;
 
-    res.cookie('access_token', this.authHelper.getBearerToken(accessToken), {
-      httpOnly: true,
-      secure: !this.appConfigService.isLocal(),
-      expires: new Date(
-        new Date().getTime() +
-          this.appConfigService.get<number>(
-            ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_MS,
-          ),
-      ),
-    });
-    res.cookie('refresh_token', this.authHelper.getBearerToken(refreshToken), {
-      httpOnly: true,
-      secure: !this.appConfigService.isLocal(),
-      expires: new Date(
-        new Date().getTime() +
-          this.appConfigService.get<number>(
-            ENV_KEY.JWT_REFRESH_TOKEN_EXPIRATION_MS,
-          ),
-      ),
-    });
+    res.cookie(
+      ACCESS_TOKEN_COOKIE_NAME,
+      this.authHelper.getBearerToken(accessToken),
+      {
+        httpOnly: true,
+        secure: !this.appConfigService.isLocal(),
+        expires: new Date(
+          new Date().getTime() +
+            this.appConfigService.get<number>(
+              ENV_KEY.JWT_ACCESS_TOKEN_EXPIRATION_MS,
+            ),
+        ),
+      },
+    );
+    res.cookie(
+      REFRESH_TOKEN_COOKIE_NAME,
+      this.authHelper.getBearerToken(refreshToken),
+      {
+        httpOnly: true,
+        secure: !this.appConfigService.isLocal(),
+        expires: new Date(
+          new Date().getTime() +
+            this.appConfigService.get<number>(
+              ENV_KEY.JWT_REFRESH_TOKEN_EXPIRATION_MS,
+            ),
+        ),
+      },
+    );
 
     await this.cacheManager.set(
       this.authHelper.getRefreshKeyInStore(userId),
