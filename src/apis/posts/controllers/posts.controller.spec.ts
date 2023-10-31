@@ -6,7 +6,6 @@ import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-d
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
 import { PostResponseDto } from '@src/apis/posts/dto/post-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
-import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { MockPostsService } from '@test/mock/services.mock';
@@ -37,13 +36,13 @@ describe('PostsController', () => {
   describe('findAllAndCount', () => {
     let query: FindPostListQueryDto;
 
-    let posts: PostEntity[];
+    let posts: PostResponseDto[];
     let totalCount: number;
 
     beforeEach(() => {
       query = new FindPostListQueryDto();
 
-      posts = [new PostEntity()];
+      posts = [new PostResponseDto()];
       totalCount = faker.datatype.number();
     });
 

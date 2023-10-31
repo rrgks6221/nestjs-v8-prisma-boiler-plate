@@ -25,7 +25,6 @@ import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-d
 import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-body.dto';
 import { PostResponseDto } from '@src/apis/posts/dto/post-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
-import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import {
@@ -40,9 +39,7 @@ import { plainToInstance } from 'class-transformer';
 @ApiBearerAuth()
 @ApiTags('posts')
 @Controller('api/posts')
-export class PostsController
-  implements BaseController<PostEntity, PostResponseDto>
-{
+export class PostsController implements BaseController<PostResponseDto> {
   constructor(private readonly postService: PostsService) {}
 
   @Get()
@@ -51,12 +48,12 @@ export class PostsController
   async findAllAndCount(
     @Query()
     findPostListQueryDto: FindPostListQueryDto,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<[PostResponseDto[], number]> {
     const [posts, count] = await this.postService.findAllAndCount(
       findPostListQueryDto,
     );
 
-    return [plainToInstance(PostEntity, posts), count];
+    return [plainToInstance(PostResponseDto, posts), count];
   }
 
   @Get(':postId')

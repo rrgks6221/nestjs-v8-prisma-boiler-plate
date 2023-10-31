@@ -5,8 +5,8 @@ export type Target = {
   field?: string;
 };
 
-export interface BaseController<Model, BaseResponse> {
-  findAllAndCount(...args: unknown[]): Promise<[Model[], number]>;
+export interface BaseController<BaseResponse> {
+  findAllAndCount(...args: unknown[]): Promise<[BaseResponse[], number]>;
   findOne(...args: unknown[]): Promise<BaseResponse>;
   create(...args: unknown[]): Promise<BaseResponse>;
   putUpdate(...args: unknown[]): Promise<BaseResponse>;

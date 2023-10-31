@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { User as UserModel } from '@prisma/client';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
 import {
   ApiFindAllAndCount,
@@ -37,7 +36,7 @@ import { plainToInstance } from 'class-transformer';
 @ApiTags('users')
 @Controller('api/users')
 export class UsersController
-  implements Omit<BaseController<UserModel, UserResponseDto>, 'create'>
+  implements Omit<BaseController<UserResponseDto>, 'create'>
 {
   constructor(private readonly userService: UsersService) {}
 
@@ -46,12 +45,12 @@ export class UsersController
   @Get()
   async findAllAndCount(
     @Query() findUserListQueryDto: FindUserListRequestQueryDto,
-  ): Promise<[UserModel[], number]> {
+  ): Promise<[UserResponseDto[], number]> {
     const [users, count] = await this.userService.findAllAndCount(
       findUserListQueryDto,
     );
 
-    return [plainToInstance(UserEntity, users), count];
+    return [plainToInstance(UserResponseDto, users), count];
   }
 
   @ApiFindOne('유저 단일 조회')

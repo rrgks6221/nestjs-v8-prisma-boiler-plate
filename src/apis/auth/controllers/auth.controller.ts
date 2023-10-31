@@ -43,7 +43,7 @@ export class AuthController {
   @SetResponse({ key: 'user', type: ResponseType.Base })
   @Get('profile')
   getProfile(@User() user: UserEntity) {
-    return new UserEntity(user);
+    return new UserResponseDto(user);
   }
 
   @ApiSignUp('회원가입')
