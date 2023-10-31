@@ -1,3 +1,4 @@
+import { ExecutionContext } from '@nestjs/common';
 import { ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 
 export const mockRequest = {
@@ -13,6 +14,25 @@ export const mock = {
     return mockRequest;
   },
 };
+
+export const mockReflector = {
+  get: jest.fn(),
+};
+
+export const mockHttpArgumentHost = {
+  getRequest() {
+    return mockRequest;
+  },
+};
+
+export const mockContext = {
+  switchToHttp() {
+    return mockHttpArgumentHost;
+  },
+  getHandler() {
+    return jest.fn();
+  },
+} as unknown as ExecutionContext;
 
 export function getParamDecoratorFactory(
   decorator: (prop?: any) => ParameterDecorator,

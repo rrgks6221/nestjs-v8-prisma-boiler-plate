@@ -16,7 +16,7 @@ import { HttpNotFoundExceptionFilter } from '@src/core/http-exception-filters/fi
 import { HttpRemainderExceptionFilter } from '@src/core/http-exception-filters/filters/http-remainder-exception.filter';
 import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/http-exception.helper';
 import { PrismaService } from '@src/core/prisma/prisma.service';
-import { SuccessInterceptor } from '@src/interceptors/success.interceptor';
+import { SuccessInterceptor } from '@src/interceptors/success-interceptor/success.interceptor';
 import { useContainer, ValidationError } from 'class-validator';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -54,7 +54,7 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector)),
-    new SuccessInterceptor(app.get(Reflector)),
+    app.get(SuccessInterceptor),
   );
 
   app.useGlobalFilters(
