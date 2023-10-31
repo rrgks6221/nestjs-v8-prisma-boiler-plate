@@ -7,7 +7,7 @@ import { UsersService } from '@src/apis/users/services/users.service';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/http-exception.helper';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
@@ -38,7 +38,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
     if (!existUser) {
       throw new UnauthorizedException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE004,
           message: 'this token is invalid',
         }),
@@ -53,7 +53,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
     if (!token) {
       throw new UnauthorizedException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE004,
           message: 'this token is invalid',
         }),
@@ -64,7 +64,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
     if (type !== JWT_TOKEN_TYPE) {
       throw new UnauthorizedException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE004,
           message: 'this token is invalid',
         }),
@@ -73,7 +73,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
     if (!refreshToken) {
       throw new UnauthorizedException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE004,
           message: 'this token is invalid',
         }),

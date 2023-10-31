@@ -10,9 +10,9 @@ import { PatchUpdatePostBodyDto } from '@src/apis/posts/dto/patch-update-post-bo
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
-import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/http-exception.helper';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { RestService } from '@src/types/type';
 
 @Injectable()
@@ -72,7 +72,7 @@ export class PostsService implements RestService<PostEntity> {
 
     if (!existPost) {
       throw new NotFoundException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE005,
           message: `postId ${postId} doesn't exist`,
         }),
@@ -166,7 +166,7 @@ export class PostsService implements RestService<PostEntity> {
 
     if (!existPost) {
       throw new NotFoundException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE005,
           message: `postId ${postId} doesn't exist`,
         }),
@@ -175,7 +175,7 @@ export class PostsService implements RestService<PostEntity> {
 
     if (existPost.userId !== userId) {
       throw new ForbiddenException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE006,
           message: `post ${postId} is not owned by user ${userId}`,
         }),

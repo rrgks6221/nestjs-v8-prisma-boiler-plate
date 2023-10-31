@@ -1,15 +1,17 @@
+import { Injectable } from '@nestjs/common';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ERROR_REASON } from '@src/constants/error-response-reason.constant';
 import {
   ExceptionError,
   ResponseJson,
-} from '@src/core/http-exception-filters/types/exception.type';
+} from '@src/http-exceptions/types/exception.type';
 
 /**
  * exception filter 들이 사용하는 메서드 및 멤버변수를 모아놓은 class
  * 각 exception filter 들은 이 클레스를 상속받아 사용함
  */
-export class HttpExceptionHelper {
+@Injectable()
+export class HttpExceptionService {
   buildResponseJson(
     statusCode: number,
     exception: ExceptionError,

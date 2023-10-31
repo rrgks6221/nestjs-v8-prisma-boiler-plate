@@ -13,9 +13,9 @@ import { PutUpdateUserRequestBodyDto } from '@src/apis/users/dto/put-update-user
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { BCRYPT_TOKEN } from '@src/constants/token.constant';
-import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/http-exception.helper';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { RestService } from '@src/types/type';
 import bcrypt from 'bcrypt';
 
@@ -79,7 +79,7 @@ export class UsersService implements RestService<UserEntity> {
 
     if (!existUser) {
       throw new NotFoundException(
-        HttpExceptionHelper.createError({
+        HttpExceptionService.createError({
           code: ERROR_CODE.CODE005,
           message: `userId ${userId} doesn't exist`,
         }),
@@ -198,7 +198,7 @@ export class UsersService implements RestService<UserEntity> {
     if (userId === loggedInUserId) return;
 
     throw new ForbiddenException(
-      HttpExceptionHelper.createError({
+      HttpExceptionService.createError({
         code: ERROR_CODE.CODE006,
         message: 'can only change your own information',
       }),
@@ -224,7 +224,7 @@ export class UsersService implements RestService<UserEntity> {
     if (existUser.id === userId) return;
 
     throw new BadRequestException(
-      HttpExceptionHelper.createError({
+      HttpExceptionService.createError({
         code: ERROR_CODE.CODE003,
         message: 'this email is already in use.',
       }),
@@ -250,7 +250,7 @@ export class UsersService implements RestService<UserEntity> {
     if (existUser.id === userId) return;
 
     throw new BadRequestException(
-      HttpExceptionHelper.createError({
+      HttpExceptionService.createError({
         code: ERROR_CODE.CODE003,
         message: 'this nickname is already in use.',
       }),

@@ -6,11 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
-import { HttpExceptionHelper } from '@src/core/http-exception-filters/helpers/http-exception.helper';
-import {
-  ExceptionError,
-  ResponseJson,
-} from '@src/core/http-exception-filters/types/exception.type';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { ExceptionError } from '@src/http-exceptions/types/exception.type';
 import { Response } from 'express';
 
 /**
@@ -18,9 +15,10 @@ import { Response } from 'express';
  */
 @Catch(NotFoundException)
 export class HttpNotFoundExceptionFilter
-  extends HttpExceptionHelper
   implements ExceptionFilter<NotFoundException>
 {
+  constructor(private readonly httpExceptionService: HttpExceptionService) {}
+
   catch(exception: NotFoundException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -37,7 +35,7 @@ export class HttpNotFoundExceptionFilter
 
     // path not found
     if (/^\bCannot (GET|POST|PATCH|PUT|DELETE)\b/.test(err.message)) {
-      exceptionError = HttpExceptionHelper.createError({
+      exceptionError = HttpExceptionService.createError({
         code: ERROR_CODE.CODE002,
         message: method + ' ' + path + ' ' + 'not found',
       });
@@ -45,7 +43,7 @@ export class HttpNotFoundExceptionFilter
       exceptionError = exception.getResponse() as ExceptionError;
     }
 
-    const responseJson: ResponseJson = this.buildResponseJson(
+    const responseJson = this.httpExceptionService.buildResponseJson(
       status,
       exceptionError,
     );
