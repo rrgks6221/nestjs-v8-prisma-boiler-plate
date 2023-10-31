@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { SwaggerBuilder } from '@src/interceptors/builder/swagger.builder';
+import { SwaggerBuilder } from '@src/interceptors/success-interceptor/builder/swagger.builder';
 
 export class DeleteResponseDto implements SwaggerBuilder {
   @ApiProperty({

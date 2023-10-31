@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ResponseBuilder } from '@src/interceptors/builder/response.builder';
+import { ResponseBuilder } from '@src/interceptors/success-interceptor/builder/response.builder';
 import { SuccessInterceptor } from '@src/interceptors/success-interceptor/success.interceptor';
 
 @Module({

@@ -11,7 +11,7 @@ import {
   SET_RESPONSE,
 } from '@src/decorators/set-response.decorator';
 import { PageDto } from '@src/dtos/page.dto';
-import { ResponseBuilder } from '@src/interceptors/builder/response.builder';
+import { ResponseBuilder } from '@src/interceptors/success-interceptor/builder/response.builder';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

@@ -1,7 +1,7 @@
 import { Reflector } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Args, ResponseType } from '@src/decorators/set-response.decorator';
-import { ResponseBuilder } from '@src/interceptors/builder/response.builder';
+import { ResponseBuilder } from '@src/interceptors/success-interceptor/builder/response.builder';
 import { SuccessInterceptor } from '@src/interceptors/success-interceptor/success.interceptor';
 import { mockContext, mockReflector, mockRequest } from '@test/mock/mock';
 import { MockClass } from '@test/mock/type';
