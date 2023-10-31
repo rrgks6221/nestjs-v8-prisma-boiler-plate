@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { POST_TITLE_LENGTH } from '@src/apis/posts/constants/post.constant';
 import { PostEntity } from '@src/apis/posts/entities/post.entity';
-import { BaseEntity } from '@src/entities/base.entity';
+import { BaseResponseDto } from '@src/dtos/base-response.dto';
 
-export class PostResponseDto extends BaseEntity implements PostEntity {
+export class PostResponseDto extends BaseResponseDto implements PostEntity {
   @ApiProperty({
     description: 'user 고유 ID',
     type: 'integer',
