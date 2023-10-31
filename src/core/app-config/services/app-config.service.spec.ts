@@ -6,7 +6,7 @@ class MockConfigService {
   get = jest.fn();
 }
 
-describe('AppConfigService', () => {
+describe(AppConfigService.name, () => {
   let service: AppConfigService;
   let mockConfigService: MockConfigService;
 
@@ -25,7 +25,15 @@ describe('AppConfigService', () => {
     mockConfigService = module.get(ConfigService);
   });
 
-  describe('get', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  describe(AppConfigService.prototype.get.name, () => {
     it('값 반환', () => {
       mockConfigService.get.mockReturnValue('value');
 
@@ -39,7 +47,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('getList', () => {
+  describe(AppConfigService.prototype.getList.name, () => {
     it('1개의 key 로 요청했을 때', () => {
       mockConfigService.get.mockReturnValueOnce('value1');
 
@@ -67,7 +75,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('getAll', () => {
+  describe(AppConfigService.prototype.getAll.name, () => {
     it('모든 env 키가 존재할 때', () => {
       mockConfigService.get.mockReturnValue('value');
 
@@ -82,7 +90,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('getAllMap', () => {
+  describe(AppConfigService.prototype.getAllMap.name, () => {
     it('모든 env 키가 존재할 때', () => {
       mockConfigService.get.mockReturnValue('value');
 
@@ -97,7 +105,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('isLocal', () => {
+  describe(AppConfigService.prototype.isLocal.name, () => {
     it('NODE_ENV 가 없을 때', () => {
       mockConfigService.get.mockReturnValue(undefined);
 
@@ -117,7 +125,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('isDevelopment', () => {
+  describe(AppConfigService.prototype.isDevelopment.name, () => {
     it('NODE_ENV 가 없을 때', () => {
       mockConfigService.get.mockReturnValue(undefined);
 
@@ -137,7 +145,7 @@ describe('AppConfigService', () => {
     });
   });
 
-  describe('isProduction', () => {
+  describe(AppConfigService.prototype.isProduction.name, () => {
     it('NODE_ENV 가 없을 때', () => {
       mockConfigService.get.mockReturnValue(undefined);
 
@@ -155,9 +163,5 @@ describe('AppConfigService', () => {
 
       expect(service.isProduction()).toBe(true);
     });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

@@ -25,7 +25,7 @@ import {
   MockUserService,
 } from '@test/mock/services.mock';
 
-describe('AuthService', () => {
+describe(AuthService.name, () => {
   let service: AuthService;
   let mockUsersService: MockUserService;
   let mockJwtService: MockJwtService;
@@ -85,7 +85,7 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('signUp', () => {
+  describe(AuthService.prototype.signUp.name, () => {
     let signUpRequestBodyDto: SignUpRequestBodyDto;
 
     let newUser: UserEntity;
@@ -105,7 +105,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('signIn', () => {
+  describe(AuthService.prototype.signIn.name, () => {
     let signInDtoRequestBody: SignInDtoRequestBody;
 
     let existUser: UserEntity;
@@ -157,7 +157,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('generateAccessToken', () => {
+  describe(AuthService.prototype.generateAccessToken.name, () => {
     let id: number;
 
     beforeEach(() => {
@@ -177,7 +177,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('generateRefreshToken', () => {
+  describe(AuthService.prototype.generateRefreshToken.name, () => {
     let id: number;
 
     beforeEach(() => {

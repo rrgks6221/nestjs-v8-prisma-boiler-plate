@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { User } from '@src/decorators/user.decorator';
 import { getParamDecoratorFactory, mock, mockRequest } from '@test/mock/mock';
 
-describe('User decorator', () => {
+describe(User.name, () => {
   let factory: any;
   let ctx: any;
   let request: any;

@@ -1,7 +1,7 @@
 import { transformPage, transformStringBoolean } from '@src/common/common';
 
 describe('common.ts 단위 테스트', () => {
-  describe('transformPage', () => {
+  describe(transformPage.name, () => {
     let obj: { value: any };
 
     beforeEach(() => {
@@ -27,7 +27,7 @@ describe('common.ts 단위 테스트', () => {
     });
   });
 
-  describe('transformStringBoolean', () => {
+  describe(transformStringBoolean.name, () => {
     let obj: { value: unknown };
 
     beforeEach(() => {

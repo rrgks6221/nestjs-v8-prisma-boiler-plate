@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
 
-describe('JwtAuthGuard', () => {
+describe(JwtAuthGuard.name, () => {
   let jwtAuthGuard: JwtAuthGuard;
 
   beforeEach(async () => {

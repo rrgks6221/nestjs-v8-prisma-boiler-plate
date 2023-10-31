@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryHelper } from '@src/helpers/query.helper';
 
-describe('QueryHelper', () => {
+describe(QueryHelper.name, () => {
   let helper: QueryHelper;
 
   beforeEach(async () => {
@@ -16,7 +16,7 @@ describe('QueryHelper', () => {
     expect(helper).toBeDefined();
   });
 
-  describe('buildWherePropForFind', () => {
+  describe(QueryHelper.prototype.buildWherePropForFind.name, () => {
     it('build where', () => {
       const likeSearchFields = ['name'] as any;
       const filter = {

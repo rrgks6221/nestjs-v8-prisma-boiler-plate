@@ -3,7 +3,7 @@ import { IsNotEmptyString } from '@src/decorators/validator/is-not-empty-string.
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 
-describe('IsNotEmptyString decorator', () => {
+describe(IsNotEmptyString.name, () => {
   let randomString;
 
   class TestClass {

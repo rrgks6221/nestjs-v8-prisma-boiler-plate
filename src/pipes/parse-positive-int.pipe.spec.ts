@@ -1,14 +1,14 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common';
 import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
 
-describe('ParsePositiveIntPipe', () => {
+describe(ParsePositiveIntPipe.name, () => {
   let target: ParsePositiveIntPipe;
 
   beforeEach(() => {
     target = new ParsePositiveIntPipe();
   });
 
-  describe('transform', () => {
+  describe(ParsePositiveIntPipe.prototype.transform.name, () => {
     describe('when validation passes', () => {
       it('should return positive number', async () => {
         const num = '3';

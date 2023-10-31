@@ -4,7 +4,7 @@ import { PrismaHealthIndicator } from '@src/apis/health/indicators/prisma-health
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 
-describe('PrismaHealthIndicator', () => {
+describe(PrismaHealthIndicator.name, () => {
   let indicator: PrismaHealthIndicator;
 
   beforeEach(async () => {
@@ -21,11 +21,15 @@ describe('PrismaHealthIndicator', () => {
     indicator = module.get<PrismaHealthIndicator>(PrismaHealthIndicator);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(indicator).toBeDefined();
   });
 
-  describe('isHealthy', () => {
+  describe(PrismaHealthIndicator.prototype.isHealthy.name, () => {
     let key: string;
 
     beforeEach(() => {
@@ -47,9 +51,5 @@ describe('PrismaHealthIndicator', () => {
 
       expect(indicator.isHealthy(key)).rejects.toThrowError(HealthCheckError);
     });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

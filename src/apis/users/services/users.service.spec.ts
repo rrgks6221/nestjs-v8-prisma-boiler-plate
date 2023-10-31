@@ -21,7 +21,7 @@ import { MockEncryption } from '@test/mock/libs.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 import { MockAuthService } from '@test/mock/services.mock';
 
-describe('UsersService', () => {
+describe(UsersService.name, () => {
   let service: UsersService;
   let mockQueryHelper: MockQueryHelper;
   let mockEncryption: MockEncryption;
@@ -64,15 +64,15 @@ describe('UsersService', () => {
     };
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('findAllAndCount', () => {
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  describe(UsersService.prototype.findAllAndCount.name, () => {
     let findUserListQueryDto: FindUserListRequestQueryDto;
 
     let users: UserEntity[];
@@ -114,7 +114,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findOneOrNotFound', () => {
+  describe(UsersService.prototype.findOneOrNotFound.name, () => {
     let userId: number;
 
     let existUser: UserEntity;
@@ -142,7 +142,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findOneBy', () => {
+  describe(UsersService.prototype.findOneBy.name, () => {
     let where: Prisma.UserWhereInput;
 
     let existUser: UserEntity;
@@ -166,7 +166,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('create', () => {
+  describe(UsersService.prototype.create.name, () => {
     let createUserRequestBodyDto: CreateUserRequestBodyDto;
 
     let newUser: UserEntity;
@@ -199,7 +199,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('patchUpdate', () => {
+  describe(UsersService.prototype.patchUpdate.name, () => {
     let userId: number;
     let loggedInUserId: number;
     let patchUpdateUserRequestBodyDto: PatchUpdateUserRequestBodyDto;
@@ -308,7 +308,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('putUpdate', () => {
+  describe(UsersService.prototype.putUpdate.name, () => {
     let userId: number;
     let loggedInUserId: number;
     let putUpdateUserBodyDto: PutUpdateUserRequestBodyDto;
@@ -397,7 +397,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('remove', () => {
+  describe(UsersService.prototype.remove.name, () => {
     let userId: number;
     let loggedInUserId: number;
 
@@ -443,7 +443,7 @@ describe('UsersService', () => {
     });
   });
 
-  describe('buildBaseResponse', () => {
+  describe(UsersService.prototype.buildDetailResponse.name, () => {
     let userId: number;
 
     let user: UserEntity;

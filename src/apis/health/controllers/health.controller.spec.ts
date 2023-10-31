@@ -5,7 +5,7 @@ import { PrismaHealthIndicator } from '@src/apis/health/indicators/prisma-health
 import { MockPrismaHealthIndicator } from '@test/mock/indicator.mock';
 import { MockHealthCheckService } from '@test/mock/services.mock';
 
-describe('HealthController', () => {
+describe(HealthController.name, () => {
   let controller: HealthController;
   let mockHealthCheckService: MockHealthCheckService;
   let mockPrismaHealthIndicator: MockPrismaHealthIndicator;
@@ -30,11 +30,15 @@ describe('HealthController', () => {
     mockPrismaHealthIndicator = module.get(PrismaHealthIndicator);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('check', () => {
+  describe(HealthController.prototype.check.name, () => {
     it('success', () => {
       mockPrismaHealthIndicator.isHealthy.mockReturnValue({
         key: 'rdb',
@@ -51,9 +55,5 @@ describe('HealthController', () => {
         },
       ]);
     });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

@@ -14,7 +14,7 @@ import {
 import { MockEmbedBuilder, MockWebhookClient } from '@test/mock/libs.mock';
 import { MockAppConfigService } from '@test/mock/services.mock';
 
-describe('NotificationService', () => {
+describe(NotificationService.name, () => {
   let service: NotificationService;
 
   beforeEach(async () => {
@@ -39,46 +39,48 @@ describe('NotificationService', () => {
     service = module.get<NotificationService>(NotificationService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('NotificationService', () => {
-    describe('warning', () => {
-      let warningExceptionFiled: WarningExceptionFiled;
+  describe(NotificationService.prototype.warning.name, () => {
+    let warningExceptionFiled: WarningExceptionFiled;
 
-      beforeEach(() => {
-        warningExceptionFiled = {
-          description: faker.random.word(),
-        };
-      });
-
-      it('send', async () => {
-        await expect(
-          service.warning(warningExceptionFiled),
-        ).resolves.toBeUndefined();
-      });
+    beforeEach(() => {
+      warningExceptionFiled = {
+        description: faker.random.word(),
+      };
     });
 
-    describe('error', () => {
-      let serverExceptionField: ServerExceptionField;
+    it('send', async () => {
+      await expect(
+        service.warning(warningExceptionFiled),
+      ).resolves.toBeUndefined();
+    });
+  });
 
-      beforeEach(() => {
-        serverExceptionField = {
-          name: faker.name.fullName(),
-          method: 'POST',
-          path: '/api',
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          body: faker.random.words(),
-          stack: faker.datatype.string(),
-        };
-      });
+  describe(NotificationService.prototype.error.name, () => {
+    let serverExceptionField: ServerExceptionField;
 
-      it('send', async () => {
-        await expect(
-          service.error(serverExceptionField),
-        ).resolves.toBeUndefined();
-      });
+    beforeEach(() => {
+      serverExceptionField = {
+        name: faker.name.fullName(),
+        method: 'POST',
+        path: '/api',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        body: faker.random.words(),
+        stack: faker.datatype.string(),
+      };
+    });
+
+    it('send', async () => {
+      await expect(
+        service.error(serverExceptionField),
+      ).resolves.toBeUndefined();
     });
   });
 });

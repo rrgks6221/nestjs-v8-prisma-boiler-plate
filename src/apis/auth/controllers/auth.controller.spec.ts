@@ -8,7 +8,7 @@ import { UserResponseDto } from '@src/apis/users/dto/user-response.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { MockAuthService } from '@test/mock/services.mock';
 
-describe('AuthController', () => {
+describe(AuthController.name, () => {
   let controller: AuthController;
   let mockAuthService: MockAuthService;
 
@@ -31,7 +31,7 @@ describe('AuthController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('signUp', () => {
+  describe(AuthController.prototype.signUp.name, () => {
     let newUser: UserEntity;
     let signUpRequestBodyDto: SignUpRequestBodyDto;
     let mockResponse: any;
@@ -58,7 +58,7 @@ describe('AuthController', () => {
     });
   });
 
-  describe('signIn', () => {
+  describe(AuthController.prototype.signIn.name, () => {
     let user: UserEntity;
     let signInDtoRequestBody: SignInDtoRequestBody;
     let mockResponse: any;
@@ -85,7 +85,7 @@ describe('AuthController', () => {
     });
   });
 
-  describe('signOut', () => {
+  describe(AuthController.prototype.signOut.name, () => {
     let mockResponse: any;
     let user: UserEntity;
 
@@ -103,7 +103,7 @@ describe('AuthController', () => {
     });
   });
 
-  describe('refresh', () => {
+  describe(AuthController.prototype.refresh.name, () => {
     let mockRes: any;
     let user: UserEntity;
 

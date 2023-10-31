@@ -10,7 +10,7 @@ import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { MockPostsService } from '@test/mock/services.mock';
 
-describe('PostsController', () => {
+describe(PostsController.name, () => {
   let controller: PostsController;
   let mockPostsService: MockPostsService;
 
@@ -33,7 +33,7 @@ describe('PostsController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('findAllAndCount', () => {
+  describe(PostsController.prototype.findAllAndCount.name, () => {
     let query: FindPostListQueryDto;
 
     let posts: PostResponseDto[];
@@ -57,7 +57,7 @@ describe('PostsController', () => {
     });
   });
 
-  describe('findOne', () => {
+  describe(PostsController.prototype.findOne.name, () => {
     let postId: number;
 
     let post: PostResponseDto;
@@ -76,7 +76,7 @@ describe('PostsController', () => {
     });
   });
 
-  describe('create', () => {
+  describe(PostsController.prototype.create.name, () => {
     let user: UserEntity;
     let body: CreatePostRequestBodyDto;
 
@@ -97,7 +97,7 @@ describe('PostsController', () => {
     });
   });
 
-  describe('putUpdate', () => {
+  describe(PostsController.prototype.putUpdate.name, () => {
     let postId: number;
     let user: UserEntity;
     let putUpdatePostDto: PutUpdatePostBodyDto;
@@ -126,7 +126,7 @@ describe('PostsController', () => {
     });
   });
 
-  describe('patchUpdate', () => {
+  describe(PostsController.prototype.patchUpdate.name, () => {
     let postId: number;
     let user: UserEntity;
     let patchUpdatePostDto: PatchUpdatePostBodyDto;
@@ -155,7 +155,7 @@ describe('PostsController', () => {
     });
   });
 
-  describe('remove', () => {
+  describe(PostsController.prototype.remove.name, () => {
     let postId: number;
     let user: UserEntity;
 

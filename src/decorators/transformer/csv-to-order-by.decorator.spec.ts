@@ -3,7 +3,7 @@ import { SortOrder } from '@src/constants/enum';
 import { CsvToOrderBy } from '@src/decorators/transformer/csv-to-order-by.decorator';
 import { plainToInstance } from 'class-transformer';
 
-describe('CsvToOrderBy', () => {
+describe(CsvToOrderBy.name, () => {
   const allowFields: string[] = ['id', 'createdAt'];
 
   class Test {

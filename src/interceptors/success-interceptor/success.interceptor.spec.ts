@@ -13,7 +13,7 @@ class MockResponseBuilder implements MockClass<ResponseBuilder> {
   pagination = jest.fn();
 }
 
-describe('SuccessInterceptor', () => {
+describe(SuccessInterceptor.name, () => {
   let interceptor: SuccessInterceptor;
   let mockResponseBuilder: MockResponseBuilder;
 
@@ -44,7 +44,7 @@ describe('SuccessInterceptor', () => {
     expect(interceptor).toBeDefined();
   });
 
-  describe('intercept', () => {
+  describe(SuccessInterceptor.prototype.intercept.name, () => {
     let args: Args;
 
     it('args가 없는 경우', async () => {

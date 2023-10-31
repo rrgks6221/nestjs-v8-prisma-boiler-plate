@@ -16,13 +16,17 @@ class TestClass {
   targetField: unknown;
 }
 
-describe('IsEssential decorator', () => {
+describe(IsEssential.name, () => {
   let testInstance: TestClass;
   let randomProp: string;
 
   beforeEach(() => {
     testInstance = new TestClass();
     randomProp = faker.random.word();
+  });
+
+  afterEach(() => {
+    field = [];
   });
 
   it('essential field 가 1개 , target field 가 있을 경우', async () => {
@@ -127,9 +131,5 @@ describe('IsEssential decorator', () => {
     expect(field).toHaveLength(1);
     expect(testInstance['targetField']).not.toBeUndefined();
     expect(errors).toHaveLength(1);
-  });
-
-  afterEach(() => {
-    field = [];
   });
 });

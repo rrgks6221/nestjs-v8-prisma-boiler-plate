@@ -7,7 +7,7 @@ import { UsersService } from '@src/apis/users/services/users.service';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { MockUserService } from '@test/mock/services.mock';
 
-describe('JwtRefreshStrategy', () => {
+describe(JwtRefreshStrategy.name, () => {
   let strategy: JwtRefreshStrategy;
   let mockUserService: MockUserService;
 
@@ -32,7 +32,7 @@ describe('JwtRefreshStrategy', () => {
     mockUserService = module.get(UsersService);
   });
 
-  describe('validate', () => {
+  describe(JwtRefreshStrategy.prototype.validate.name, () => {
     let payload: Payload;
 
     let existUser: UserEntity;

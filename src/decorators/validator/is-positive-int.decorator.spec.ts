@@ -2,7 +2,7 @@ import { IsPositiveInt } from '@src/decorators/validator/is-positive-int.decorat
 import { plainToInstance } from 'class-transformer';
 import { validate, ValidationOptions } from 'class-validator';
 
-describe('IsPositiveIntDecorator', () => {
+describe(IsPositiveInt.name, () => {
   let validationOptions: ValidationOptions;
 
   beforeEach(() => {

@@ -3,7 +3,7 @@ import { PrismaService } from '@src/core/prisma/prisma.service';
 import { IsRecordConstraint } from '@src/decorators/validator/is-record.decorator';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 
-describe('IsRecord decorator validate 메서드', () => {
+describe(IsRecordConstraint.name, () => {
   let isRecordConstraint: IsRecordConstraint;
   const args: any = {
     value: '',
@@ -13,7 +13,7 @@ describe('IsRecord decorator validate 메서드', () => {
     property: '',
   };
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         IsRecordConstraint,
@@ -25,10 +25,15 @@ describe('IsRecord decorator validate 메서드', () => {
     }).compile();
 
     isRecordConstraint = module.get<IsRecordConstraint>(IsRecordConstraint);
+    args.constraints = [{ model: 'user', field: 'id' }];
   });
 
-  beforeEach(() => {
-    args.constraints = [{ model: 'user', field: 'id' }];
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should be defined', () => {
+    expect(isRecordConstraint).toBeDefined();
   });
 
   it('raw 가 존재해야하고 실제 존재할 경우', async () => {
@@ -65,9 +70,5 @@ describe('IsRecord decorator validate 메서드', () => {
     const isRecord = await isRecordConstraint.validate('', args);
 
     expect(isRecord).toBeTruthy();
-  });
-
-  afterEach(() => {
-    mockPrismaService.user.findFirst.mockRestore();
   });
 });

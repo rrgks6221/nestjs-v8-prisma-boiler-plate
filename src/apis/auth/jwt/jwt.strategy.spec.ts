@@ -7,7 +7,7 @@ import { UsersService } from '@src/apis/users/services/users.service';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { MockUserService } from '@test/mock/services.mock';
 
-describe('JwtStrategy', () => {
+describe(JwtStrategy.name, () => {
   let jwtStrategy: JwtStrategy;
   let mockUserService: MockUserService;
 
@@ -42,7 +42,7 @@ describe('JwtStrategy', () => {
     expect(jwtStrategy);
   });
 
-  describe('validate', () => {
+  describe(JwtStrategy.prototype.validate.name, () => {
     let payload: any;
     let userId: number;
 

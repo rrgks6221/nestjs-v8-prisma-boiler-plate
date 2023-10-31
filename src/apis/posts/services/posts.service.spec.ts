@@ -13,7 +13,7 @@ import { QueryHelper } from '@src/helpers/query.helper';
 import { MockQueryHelper } from '@test/mock/helper.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 
-describe('PostsService', () => {
+describe(PostsService.name, () => {
   let service: PostsService;
   let mockQueryHelper: MockQueryHelper;
 
@@ -36,11 +36,15 @@ describe('PostsService', () => {
     mockQueryHelper = module.get(QueryHelper);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAllAndCount', () => {
+  describe(PostsService.prototype.findAllAndCount.name, () => {
     let findPostListQueryDto: FindPostListQueryDto;
 
     let posts: PostEntity[];
@@ -86,7 +90,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('findOneOrNotFound', () => {
+  describe(PostsService.prototype.findOneOrNotFound.name, () => {
     let postId: number;
     let existPost: PostEntity;
 
@@ -114,7 +118,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('create', () => {
+  describe(PostsService.prototype.create.name, () => {
     let userId: number;
     let createPostBodyDto: CreatePostRequestBodyDto;
 
@@ -136,7 +140,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('putUpdate', () => {
+  describe(PostsService.prototype.putUpdate.name, () => {
     let postId: number;
     let userId: number;
     let putUpdatePostDto: PutUpdatePostBodyDto;
@@ -172,7 +176,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('patchUpdate', () => {
+  describe(PostsService.prototype.patchUpdate.name, () => {
     let postId: number;
     let userId: number;
     let patchUpdatePostDto: PatchUpdatePostBodyDto;
@@ -208,7 +212,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('remove', () => {
+  describe(PostsService.prototype.remove.name, () => {
     let postId: number;
     let userId: number;
 
@@ -239,7 +243,7 @@ describe('PostsService', () => {
     });
   });
 
-  describe('buildBaseResponse', () => {
+  describe(PostsService.prototype.buildDetailResponse.name, () => {
     let postId: number;
 
     let postEntity: PostEntity;
@@ -311,9 +315,5 @@ describe('PostsService', () => {
         await expect(service.remove(postId, userId)).resolves.toBe(1);
       });
     });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });

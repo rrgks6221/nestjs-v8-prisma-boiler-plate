@@ -9,7 +9,7 @@ import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
 import { MockUserService } from '@test/mock/services.mock';
 
-describe('UsersController', () => {
+describe(UsersController.name, () => {
   let controller: UsersController;
   let mockUserService: MockUserService;
 
@@ -36,7 +36,7 @@ describe('UsersController', () => {
     jest.clearAllMocks();
   });
 
-  describe('findAllAndCount', () => {
+  describe(UsersController.prototype.findAllAndCount.name, () => {
     let findUserListQueryDto: FindUserListRequestQueryDto;
 
     let users: UserEntity[];
@@ -61,7 +61,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('findOne', () => {
+  describe(UsersController.prototype.findOne.name, () => {
     let userId: number;
 
     let userEntity: UserEntity;
@@ -82,7 +82,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('patchUpdate', () => {
+  describe(UsersController.prototype.patchUpdate.name, () => {
     let userId: number;
     let patchUpdateUserBodyDto: PatchUpdateUserRequestBodyDto;
     let user: UserEntity;
@@ -107,7 +107,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('putUpdate', () => {
+  describe(UsersController.prototype.putUpdate.name, () => {
     let userId: number;
     let putUpdateUserBodyDto: PutUpdateUserRequestBodyDto;
     let user: UserEntity;
@@ -132,7 +132,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('remove', () => {
+  describe(UsersController.prototype.remove.name, () => {
     let userId: number;
     let user: UserEntity;
 
