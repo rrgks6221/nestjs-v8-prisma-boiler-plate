@@ -68,7 +68,7 @@ export class ResponseBuilder {
       });
     }
 
-    if (Number.isInteger(totalCount)) {
+    if (!Number.isInteger(totalCount)) {
       throw new HttpInternalServerErrorException({
         errorCode: ERROR_CODE.CODE001,
         log: 'pagination response build 중 totalCount 가 integer format 이 아님',
