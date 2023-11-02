@@ -1,11 +1,4 @@
-import {
-  CACHE_MANAGER,
-  ForbiddenException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginType } from '@prisma/client';
 import {
@@ -22,7 +15,9 @@ import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { BCRYPT_TOKEN } from '@src/constants/token.constant';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpInternalServerErrorException } from '@src/http-exceptions/exceptions/http-internal-server-error.exception';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
 import bcrypt from 'bcrypt';
 import { Cache } from 'cache-manager';
 import { Response } from 'express';
@@ -56,21 +51,17 @@ export class AuthService {
     });
 
     if (!existUser) {
-      throw new UnauthorizedException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE004,
-          message: 'Different account information',
-        }),
-      );
+      throw new HttpUnauthorizedException({
+        errorCode: ERROR_CODE.CODE004,
+        message: 'Different account information',
+      });
     }
 
     if (!existUser.password) {
-      throw new InternalServerErrorException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE001,
-          message: '서버 에러',
-        }),
-      );
+      throw new HttpInternalServerErrorException({
+        errorCode: ERROR_CODE.CODE001,
+        message: 'server error',
+      });
     }
 
     const isComparePassword = await this.encryption.compare(
@@ -79,12 +70,10 @@ export class AuthService {
     );
 
     if (!isComparePassword) {
-      throw new ForbiddenException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE006,
-          message: 'Different account information',
-        }),
-      );
+      throw new HttpForbiddenException({
+        errorCode: ERROR_CODE.CODE006,
+        message: 'Different account information',
+      });
     }
 
     return existUser;

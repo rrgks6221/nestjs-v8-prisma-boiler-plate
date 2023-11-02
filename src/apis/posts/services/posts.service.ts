@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Post } from '@prisma/client';
 import { CreatePostRequestBodyDto } from '@src/apis/posts/dto/create-post-request-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
@@ -12,7 +8,8 @@ import { PostEntity } from '@src/apis/posts/entities/post.entity';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
 import { RestService } from '@src/types/type';
 
 @Injectable()
@@ -71,12 +68,10 @@ export class PostsService implements RestService<PostEntity> {
     });
 
     if (!existPost) {
-      throw new NotFoundException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE005,
-          message: `postId ${postId} doesn't exist`,
-        }),
-      );
+      throw new HttpNotFoundException({
+        errorCode: ERROR_CODE.CODE005,
+        message: `postId ${postId} doesn't exist`,
+      });
     }
 
     return existPost;
@@ -165,21 +160,17 @@ export class PostsService implements RestService<PostEntity> {
     });
 
     if (!existPost) {
-      throw new NotFoundException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE005,
-          message: `postId ${postId} doesn't exist`,
-        }),
-      );
+      throw new HttpNotFoundException({
+        errorCode: ERROR_CODE.CODE005,
+        message: `postId ${postId} doesn't exist`,
+      });
     }
 
     if (existPost.userId !== userId) {
-      throw new ForbiddenException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE006,
-          message: `post ${postId} is not owned by user ${userId}`,
-        }),
-      );
+      throw new HttpForbiddenException({
+        errorCode: ERROR_CODE.CODE006,
+        message: `post ${postId} is not owned by user ${userId}`,
+      });
     }
 
     return existPost;

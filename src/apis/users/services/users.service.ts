@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { FindUserListRequestQueryDto } from '@src/apis/users/dto/find-user-list-request-query.dto';
@@ -15,6 +9,9 @@ import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { BCRYPT_TOKEN } from '@src/constants/token.constant';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { HttpBadRequestException } from '@src/http-exceptions/exceptions/http-bad-request.exception';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
 import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { RestService } from '@src/types/type';
 import bcrypt from 'bcrypt';
@@ -78,12 +75,10 @@ export class UsersService implements RestService<UserEntity> {
     });
 
     if (!existUser) {
-      throw new NotFoundException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE005,
-          message: `userId ${userId} doesn't exist`,
-        }),
-      );
+      throw new HttpNotFoundException({
+        errorCode: ERROR_CODE.CODE005,
+        message: `userId ${userId} doesn't exist`,
+      });
     }
 
     return existUser;
@@ -197,12 +192,10 @@ export class UsersService implements RestService<UserEntity> {
   private checkOwn(userId: number, loggedInUserId: number): void {
     if (userId === loggedInUserId) return;
 
-    throw new ForbiddenException(
-      HttpExceptionService.createError({
-        code: ERROR_CODE.CODE006,
-        message: 'can only change your own information',
-      }),
-    );
+    throw new HttpForbiddenException({
+      errorCode: ERROR_CODE.CODE006,
+      message: 'can only change your own information',
+    });
   }
 
   private async checkUniqueEmail(
@@ -225,7 +218,7 @@ export class UsersService implements RestService<UserEntity> {
 
     throw new BadRequestException(
       HttpExceptionService.createError({
-        code: ERROR_CODE.CODE003,
+        errorCode: ERROR_CODE.CODE003,
         message: 'this email is already in use.',
       }),
     );
@@ -249,11 +242,9 @@ export class UsersService implements RestService<UserEntity> {
 
     if (existUser.id === userId) return;
 
-    throw new BadRequestException(
-      HttpExceptionService.createError({
-        code: ERROR_CODE.CODE003,
-        message: 'this nickname is already in use.',
-      }),
-    );
+    throw new HttpBadRequestException({
+      errorCode: ERROR_CODE.CODE003,
+      message: 'this nickname is already in use.',
+    });
   }
 }

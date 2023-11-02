@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { JWT_TOKEN_TYPE } from '@src/apis/auth/constants/auth.constant';
 import { Payload } from '@src/apis/auth/types/auth.type';
@@ -7,7 +7,7 @@ import { UsersService } from '@src/apis/users/services/users.service';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
@@ -32,12 +32,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
 
     if (!existUser) {
-      throw new UnauthorizedException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE004,
-          message: 'this token is invalid',
-        }),
-      );
+      throw new HttpUnauthorizedException({
+        errorCode: ERROR_CODE.CODE004,
+        message: 'this token is invalid',
+      });
     }
 
     return new UserEntity(existUser);
@@ -47,32 +45,26 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const token = req.cookies?.access_token;
 
     if (!token) {
-      throw new UnauthorizedException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE004,
-          message: 'this token is invalid',
-        }),
-      );
+      throw new HttpUnauthorizedException({
+        errorCode: ERROR_CODE.CODE004,
+        message: 'this token is invalid',
+      });
     }
 
     const [type, accessToken] = token.split(' ');
 
     if (type !== JWT_TOKEN_TYPE) {
-      throw new UnauthorizedException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE004,
-          message: 'this token is invalid',
-        }),
-      );
+      throw new HttpUnauthorizedException({
+        errorCode: ERROR_CODE.CODE004,
+        message: 'this token is invalid',
+      });
     }
 
     if (!accessToken) {
-      throw new UnauthorizedException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE004,
-          message: 'this token is invalid',
-        }),
-      );
+      throw new HttpUnauthorizedException({
+        errorCode: ERROR_CODE.CODE004,
+        message: 'this token is invalid',
+      });
     }
 
     return accessToken;

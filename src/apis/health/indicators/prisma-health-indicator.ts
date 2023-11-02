@@ -6,6 +6,9 @@ import {
 } from '@nestjs/terminus';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 
+/**
+ * @todo exception filter
+ */
 @Injectable()
 export class PrismaHealthIndicator extends HealthIndicator {
   constructor(private readonly prismaService: PrismaService) {

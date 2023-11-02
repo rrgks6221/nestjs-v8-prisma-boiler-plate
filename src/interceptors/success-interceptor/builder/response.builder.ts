@@ -1,8 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DEFAULT_PAGE_SIZE } from '@src/constants/constant';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { PageDto } from '@src/dtos/page.dto';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpInternalServerErrorException } from '@src/http-exceptions/exceptions/http-internal-server-error.exception';
 import { DeleteResponseDto } from '@src/interceptors/success-interceptor/dto/delete-response.dto';
 import { DetailResponseDto } from '@src/interceptors/success-interceptor/dto/detail-response.dto';
 import { PaginationResponseDto } from '@src/interceptors/success-interceptor/dto/pagination-response.dto';
@@ -26,12 +26,10 @@ export class ResponseBuilder {
     const { data } = res;
 
     if (typeof data !== 'number' || !Number.isInteger(data)) {
-      throw new InternalServerErrorException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE001,
-          message: '서버 에러',
-        }),
-      );
+      throw new HttpInternalServerErrorException({
+        errorCode: ERROR_CODE.CODE001,
+        message: 'server error',
+      });
     }
 
     return new DeleteResponseDto(data);
@@ -41,23 +39,19 @@ export class ResponseBuilder {
     const { key, data } = res;
 
     if (!Array.isArray(data)) {
-      throw new InternalServerErrorException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE001,
-          message: '서버 에러',
-        }),
-      );
+      throw new HttpInternalServerErrorException({
+        errorCode: ERROR_CODE.CODE001,
+        message: 'server error',
+      });
     }
 
     const [array, totalCount] = data;
 
     if (!Array.isArray(array) || typeof totalCount !== 'number') {
-      throw new InternalServerErrorException(
-        HttpExceptionService.createError({
-          code: ERROR_CODE.CODE001,
-          message: '서버 에러',
-        }),
-      );
+      throw new HttpInternalServerErrorException({
+        errorCode: ERROR_CODE.CODE001,
+        message: 'server error',
+      });
     }
 
     const currentPage = Number(pageDto.page) || 1;
