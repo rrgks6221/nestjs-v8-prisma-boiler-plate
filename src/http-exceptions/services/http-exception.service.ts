@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ERROR_REASON } from '@src/constants/error-response-reason.constant';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import {
   ExceptionError,
   ResponseJson,
@@ -8,6 +9,14 @@ import {
 
 @Injectable()
 export class HttpExceptionService {
+  constructor(private readonly appConfigService: AppConfigService) {}
+
+  getErrorStack(exception: any) {
+    const isProduction = this.appConfigService.isProduction();
+
+    return isProduction ? undefined : exception.stack;
+  }
+
   buildResponseJson(
     statusCode: number,
     exception: ExceptionError,
