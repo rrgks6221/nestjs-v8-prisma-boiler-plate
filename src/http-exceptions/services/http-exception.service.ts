@@ -33,25 +33,25 @@ export class HttpExceptionService {
   }
 
   static createError(error: {
-    code: typeof ERROR_CODE[keyof typeof ERROR_CODE];
+    errorCode: typeof ERROR_CODE[keyof typeof ERROR_CODE];
     message: string;
   }): ExceptionError;
 
   static createError(error: {
-    code: typeof ERROR_CODE[keyof typeof ERROR_CODE];
+    errorCode: typeof ERROR_CODE[keyof typeof ERROR_CODE];
     messages: string[];
   }): ExceptionError;
 
   static createError(error: {
-    code: typeof ERROR_CODE[keyof typeof ERROR_CODE];
+    errorCode: typeof ERROR_CODE[keyof typeof ERROR_CODE];
     message: string;
     messages: string[];
   }): ExceptionError {
-    const { code, message, messages } = error;
+    const { errorCode, message, messages } = error;
 
     return {
-      code,
-      reason: ERROR_REASON[code],
+      code: errorCode,
+      reason: ERROR_REASON[errorCode],
       messages: messages || [message],
     };
   }

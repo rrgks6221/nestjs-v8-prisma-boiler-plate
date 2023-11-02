@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ClassSerializerInterceptor,
-  ValidationPipe,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@src/app.module';
@@ -10,13 +6,15 @@ import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { PrismaService } from '@src/core/prisma/prisma.service';
+import { HttpBadRequestException } from '@src/http-exceptions/exceptions/http-bad-request.exception';
 import { HttpBadRequestExceptionFilter } from '@src/http-exceptions/filters/http-bad-request-exception.filter';
+import { HttpForbiddenExceptionFilter } from '@src/http-exceptions/filters/http-forbidden-exception.filter';
 import { HttpNestInternalServerErrorExceptionFilter } from '@src/http-exceptions/filters/http-internal-server-error-exception.filter';
 import { HttpNotFoundExceptionFilter } from '@src/http-exceptions/filters/http-not-found-exception.filter';
 import { HttpPathNotFoundExceptionFilter } from '@src/http-exceptions/filters/http-path-not-found-exception.filter';
 import { HttpProcessErrorExceptionFilter } from '@src/http-exceptions/filters/http-process-error-exception.filter';
 import { HttpRemainderExceptionFilter } from '@src/http-exceptions/filters/http-remainder-exception.filter';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpUnauthorizedExceptionFilter } from '@src/http-exceptions/filters/http-unauthorized-exception.filter';
 import { SuccessInterceptor } from '@src/interceptors/success-interceptor/success.interceptor';
 import { useContainer, ValidationError } from 'class-validator';
 import cookieParser from 'cookie-parser';
@@ -44,12 +42,10 @@ async function bootstrap() {
           return Object.values(error.constraints || {});
         });
 
-        throw new BadRequestException(
-          HttpExceptionService.createError({
-            code: ERROR_CODE.CODE003,
-            messages,
-          }),
-        );
+        throw new HttpBadRequestException({
+          errorCode: ERROR_CODE.CODE003,
+          message: messages[0],
+        });
       },
     }),
   );
@@ -64,6 +60,8 @@ async function bootstrap() {
     app.get(HttpNestInternalServerErrorExceptionFilter),
     app.get(HttpNotFoundExceptionFilter),
     app.get(HttpPathNotFoundExceptionFilter),
+    app.get(HttpForbiddenExceptionFilter),
+    app.get(HttpUnauthorizedExceptionFilter),
     app.get(HttpBadRequestExceptionFilter),
   );
 
