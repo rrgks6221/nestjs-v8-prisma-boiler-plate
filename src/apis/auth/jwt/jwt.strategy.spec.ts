@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
-import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtStrategy } from '@src/apis/auth/jwt/jwt.strategy';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
 import { MockUserService } from '@test/mock/services.mock';
 
 describe(JwtStrategy.name, () => {
@@ -65,7 +65,7 @@ describe(JwtStrategy.name, () => {
       mockUserService.findOneBy.mockResolvedValue(null);
 
       await expect(jwtStrategy.validate(payload)).rejects.toThrowError(
-        UnauthorizedException,
+        HttpUnauthorizedException,
       );
     });
   });

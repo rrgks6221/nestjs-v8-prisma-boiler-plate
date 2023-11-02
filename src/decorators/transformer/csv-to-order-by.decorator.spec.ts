@@ -1,6 +1,6 @@
-import { InternalServerErrorException } from '@nestjs/common';
 import { SortOrder } from '@src/constants/enum';
 import { CsvToOrderBy } from '@src/decorators/transformer/csv-to-order-by.decorator';
+import { HttpInternalServerErrorException } from '@src/http-exceptions/exceptions/http-internal-server-error.exception';
 import { plainToInstance } from 'class-transformer';
 
 describe(CsvToOrderBy.name, () => {
@@ -14,7 +14,7 @@ describe(CsvToOrderBy.name, () => {
   it('string 타입이 들어오지 않은 경우', () => {
     expect(() => {
       plainToInstance(Test, { orderBy: 1 });
-    }).toThrowError(new InternalServerErrorException());
+    }).toThrowError(HttpInternalServerErrorException);
   });
 
   it('empty string 이 들어온경우 기본값 안줌', () => {

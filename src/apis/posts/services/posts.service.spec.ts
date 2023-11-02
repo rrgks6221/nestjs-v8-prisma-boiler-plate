@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreatePostRequestBodyDto } from '@src/apis/posts/dto/create-post-request-body.dto';
 import { FindPostListQueryDto } from '@src/apis/posts/dto/find-post-list-query-dto';
@@ -10,6 +9,8 @@ import { PostsService } from '@src/apis/posts/services/posts.service';
 import { SortOrder } from '@src/constants/enum';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
 import { MockQueryHelper } from '@test/mock/helper.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
 
@@ -105,7 +106,7 @@ describe(PostsService.name, () => {
       mockPrismaService.post.findFirst.mockResolvedValue(null);
 
       await expect(service.findOneOrNotFound(postId)).rejects.toThrowError(
-        NotFoundException,
+        HttpNotFoundException,
       );
     });
 
@@ -287,7 +288,7 @@ describe(PostsService.name, () => {
         mockPrismaService.post.findFirst.mockResolvedValue(existPost);
 
         await expect(service.remove(postId, userId)).rejects.toThrowError(
-          NotFoundException,
+          HttpNotFoundException,
         );
       });
 
@@ -300,7 +301,7 @@ describe(PostsService.name, () => {
         mockPrismaService.post.findFirst.mockResolvedValue(existPost);
 
         await expect(service.remove(postId, userId)).rejects.toThrowError(
-          ForbiddenException,
+          HttpForbiddenException,
         );
       });
 

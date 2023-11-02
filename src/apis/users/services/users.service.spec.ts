@@ -1,8 +1,3 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma } from '@prisma/client';
 import { AuthService } from '@src/apis/auth/services/auth.service';
@@ -16,6 +11,9 @@ import { SortOrder } from '@src/constants/enum';
 import { BCRYPT_TOKEN } from '@src/constants/token.constant';
 import { PrismaService } from '@src/core/prisma/prisma.service';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { HttpBadRequestException } from '@src/http-exceptions/exceptions/http-bad-request.exception';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
 import { MockQueryHelper } from '@test/mock/helper.mock';
 import { MockEncryption } from '@test/mock/libs.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
@@ -129,7 +127,7 @@ describe(UsersService.name, () => {
       mockPrismaService.user.findFirst.mockResolvedValue(null);
 
       await expect(service.findOneOrNotFound(userId)).rejects.toThrowError(
-        NotFoundException,
+        HttpNotFoundException,
       );
     });
 
@@ -225,7 +223,7 @@ describe(UsersService.name, () => {
           loggedInUserId,
           patchUpdateUserRequestBodyDto,
         ),
-      ).rejects.toThrowError(NotFoundException);
+      ).rejects.toThrowError(HttpNotFoundException);
     });
 
     it('본인 계정이 아닌 경우', async () => {
@@ -240,7 +238,7 @@ describe(UsersService.name, () => {
           loggedInUserId,
           patchUpdateUserRequestBodyDto,
         ),
-      ).rejects.toThrowError(ForbiddenException);
+      ).rejects.toThrowError(HttpForbiddenException);
     });
 
     it('중복된 이메일이 있는 경우', async () => {
@@ -259,7 +257,7 @@ describe(UsersService.name, () => {
           loggedInUserId,
           patchUpdateUserRequestBodyDto,
         ),
-      ).rejects.toThrowError(BadRequestException);
+      ).rejects.toThrowError(HttpBadRequestException);
     });
 
     it('중복된 닉네임이 있는 경우', async () => {
@@ -280,7 +278,7 @@ describe(UsersService.name, () => {
           loggedInUserId,
           patchUpdateUserRequestBodyDto,
         ),
-      ).rejects.toThrowError(BadRequestException);
+      ).rejects.toThrowError(HttpBadRequestException);
     });
 
     it('업데이트 성공', async () => {
@@ -330,7 +328,7 @@ describe(UsersService.name, () => {
 
       await expect(
         service.putUpdate(userId, loggedInUserId, putUpdateUserBodyDto),
-      ).rejects.toThrowError(NotFoundException);
+      ).rejects.toThrowError(HttpNotFoundException);
     });
 
     it('본인 계정이 아닌 경우', async () => {
@@ -341,7 +339,7 @@ describe(UsersService.name, () => {
 
       await expect(
         service.putUpdate(userId, loggedInUserId, putUpdateUserBodyDto),
-      ).rejects.toThrowError(ForbiddenException);
+      ).rejects.toThrowError(HttpForbiddenException);
     });
 
     it('중복된 이메일이 있는 경우', async () => {
@@ -356,7 +354,7 @@ describe(UsersService.name, () => {
 
       await expect(
         service.putUpdate(userId, loggedInUserId, putUpdateUserBodyDto),
-      ).rejects.toThrowError(BadRequestException);
+      ).rejects.toThrowError(HttpBadRequestException);
     });
 
     it('중복된 닉네임이 있는 경우', async () => {
@@ -373,7 +371,7 @@ describe(UsersService.name, () => {
 
       await expect(
         service.putUpdate(userId, loggedInUserId, putUpdateUserBodyDto),
-      ).rejects.toThrowError(BadRequestException);
+      ).rejects.toThrowError(HttpBadRequestException);
     });
 
     it('업데이트 성공', async () => {
@@ -415,7 +413,7 @@ describe(UsersService.name, () => {
       mockPrismaService.user.findFirst.mockResolvedValueOnce(null);
 
       await expect(service.remove(userId, loggedInUserId)).rejects.toThrowError(
-        NotFoundException,
+        HttpNotFoundException,
       );
     });
 
@@ -426,7 +424,7 @@ describe(UsersService.name, () => {
       mockPrismaService.user.findFirst.mockResolvedValueOnce(new UserEntity());
 
       await expect(service.remove(userId, loggedInUserId)).rejects.toThrowError(
-        ForbiddenException,
+        HttpForbiddenException,
       );
     });
 

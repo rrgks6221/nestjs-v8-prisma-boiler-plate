@@ -1,9 +1,4 @@
-import {
-  CACHE_MANAGER,
-  ForbiddenException,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
@@ -15,6 +10,9 @@ import { UsersService } from '@src/apis/users/services/users.service';
 import { BCRYPT_TOKEN } from '@src/constants/token.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { PrismaService } from '@src/core/prisma/prisma.service';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpInternalServerErrorException } from '@src/http-exceptions/exceptions/http-internal-server-error.exception';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
 import { MockAUthHelper } from '@test/mock/helper.mock';
 import { MockCacheManager, MockEncryption } from '@test/mock/libs.mock';
 import { mockPrismaService } from '@test/mock/prisma-service.mock';
@@ -119,7 +117,7 @@ describe(AuthService.name, () => {
       mockUsersService.findOneBy.mockResolvedValue(null);
 
       await expect(service.signIn(signInDtoRequestBody)).rejects.toThrowError(
-        UnauthorizedException,
+        HttpUnauthorizedException,
       );
     });
 
@@ -129,7 +127,7 @@ describe(AuthService.name, () => {
       mockUsersService.findOneBy.mockResolvedValue(existUser);
 
       await expect(service.signIn(signInDtoRequestBody)).rejects.toThrowError(
-        InternalServerErrorException,
+        HttpInternalServerErrorException,
       );
     });
 
@@ -140,7 +138,7 @@ describe(AuthService.name, () => {
       mockEncryption.compare.mockResolvedValue(false);
 
       await expect(service.signIn(signInDtoRequestBody)).rejects.toThrowError(
-        ForbiddenException,
+        HttpForbiddenException,
       );
     });
 

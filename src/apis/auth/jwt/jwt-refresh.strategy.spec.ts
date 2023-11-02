@@ -1,10 +1,10 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtRefreshStrategy } from '@src/apis/auth/jwt/jwt-refresh.strategy';
 import { Payload } from '@src/apis/auth/types/auth.type';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
 import { MockUserService } from '@test/mock/services.mock';
 
 describe(JwtRefreshStrategy.name, () => {
@@ -47,7 +47,7 @@ describe(JwtRefreshStrategy.name, () => {
       mockUserService.findOneBy.mockResolvedValue(null);
 
       await expect(strategy.validate(payload)).rejects.toThrowError(
-        UnauthorizedException,
+        HttpUnauthorizedException,
       );
     });
 

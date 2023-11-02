@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserRequestBodyDto } from '@src/apis/users/dto/create-user-request-body.dto';
 import { FindUserListRequestQueryDto } from '@src/apis/users/dto/find-user-list-request-query.dto';
@@ -12,7 +12,6 @@ import { QueryHelper } from '@src/helpers/query.helper';
 import { HttpBadRequestException } from '@src/http-exceptions/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
-import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { RestService } from '@src/types/type';
 import bcrypt from 'bcrypt';
 
@@ -216,12 +215,10 @@ export class UsersService implements RestService<UserEntity> {
 
     if (existUser.id === userId) return;
 
-    throw new BadRequestException(
-      HttpExceptionService.createError({
-        errorCode: ERROR_CODE.CODE003,
-        message: 'this email is already in use.',
-      }),
-    );
+    throw new HttpBadRequestException({
+      errorCode: ERROR_CODE.CODE003,
+      message: 'this email is already in use.',
+    });
   }
 
   private async checkUniqueNickname(
