@@ -6,28 +6,25 @@ import { ExceptionResponseDto } from '@src/http-exceptions/dto/exception-respons
 interface ExceptionError {
   errorCode: typeof ERROR_CODE[keyof typeof ERROR_CODE];
   message: string;
+  stack?: any;
 }
 @Injectable()
 export class HttpExceptionService {
   constructor(private readonly appConfigService: AppConfigService) {}
 
-  getErrorStack(exception: any) {
-    const isProduction = this.appConfigService.isProduction();
-
-    return isProduction ? undefined : exception.stack;
-  }
-
   buildResponseJson(
     statusCode: number,
     exceptionError: ExceptionError,
   ): ExceptionResponseDto {
+    const isProduction = this.appConfigService.isProduction();
     const { errorCode, message } = exceptionError;
 
     return new ExceptionResponseDto({
       statusCode,
       errorCode,
       message,
-      stack: statusCode <= 500 ? this.getErrorStack(statusCode) : undefined,
+      stack:
+        statusCode >= 500 && isProduction ? exceptionError.stack : undefined,
     });
   }
 }
