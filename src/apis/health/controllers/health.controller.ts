@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
+import { HealthCheckErrorFilter } from '@src/apis/health/filter/health-check-error.filter';
 import { PrismaHealthIndicator } from '@src/apis/health/indicators/prisma-health-indicator';
 
 @ApiTags('health')
@@ -12,6 +13,7 @@ export class HealthController {
   ) {}
 
   @Get()
+  @UseFilters(HealthCheckErrorFilter)
   @HealthCheck()
   check() {
     return this.healthCheckService.check([

@@ -17,7 +17,8 @@ export class PrismaHealthIndicator extends HealthIndicator {
 
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     try {
-      await this.prismaService.$queryRaw`SELECT 1`;
+      await this.prismaService.$queryRaw`SELECT asd`;
+
       return this.getStatus(key, true);
     } catch (e) {
       throw new HealthCheckError('rdb check failed', e);
