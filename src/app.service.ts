@@ -39,7 +39,7 @@ export class AppService {
   }
 
   setHelmet(app: INestApplication): void {
-    app.use.arguments(helmet());
+    app.use(helmet());
   }
 
   setCookieParser(app: INestApplication): void {
