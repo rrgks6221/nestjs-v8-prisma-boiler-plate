@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Version,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
@@ -27,6 +28,7 @@ import { PostResponseDto } from '@src/apis/posts/dto/post-response.dto';
 import { PutUpdatePostBodyDto } from '@src/apis/posts/dto/put-update-post-body-dto';
 import { PostsService } from '@src/apis/posts/services/posts.service';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
+import { ApiVersion } from '@src/constants/enum';
 import {
   ResponseType,
   SetResponse,
@@ -38,13 +40,14 @@ import { plainToInstance } from 'class-transformer';
 
 @ApiBearerAuth()
 @ApiTags('posts')
-@Controller('api/posts')
+@Controller('posts')
 export class PostsController implements RestController<PostResponseDto> {
   constructor(private readonly postService: PostsService) {}
 
-  @Get()
+  @Version(ApiVersion.One)
   @ApiFindAllAndCount('post 전체 조회')
   @SetResponse({ key: 'posts', type: ResponseType.Pagination })
+  @Get()
   async findAllAndCount(
     @Query()
     findPostListQueryDto: FindPostListQueryDto,
@@ -56,9 +59,10 @@ export class PostsController implements RestController<PostResponseDto> {
     return [plainToInstance(PostResponseDto, posts), count];
   }
 
-  @Get(':postId')
+  @Version(ApiVersion.One)
   @ApiFindOne('post 상세 조회')
   @SetResponse({ key: 'post', type: ResponseType.Detail })
+  @Get(':postId')
   async findOne(
     @Param('postId', ParsePositiveIntPipe) postId: number,
   ): Promise<PostResponseDto> {
@@ -69,6 +73,7 @@ export class PostsController implements RestController<PostResponseDto> {
     return new PostResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @UseGuards(JwtAuthGuard)
   @ApiCreate('post 생성')
   @SetResponse({ key: 'post', type: ResponseType.Detail })
@@ -84,6 +89,7 @@ export class PostsController implements RestController<PostResponseDto> {
     return new PostResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @UseGuards(JwtAuthGuard)
   @ApiPutUpdate('post 수정')
   @SetResponse({ key: 'post', type: ResponseType.Detail })
@@ -104,6 +110,7 @@ export class PostsController implements RestController<PostResponseDto> {
     return new PostResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @ApiPatchUpdate('post 부분 수정')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ key: 'post', type: ResponseType.Detail })
@@ -124,6 +131,7 @@ export class PostsController implements RestController<PostResponseDto> {
     return new PostResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @ApiRemove('post 삭제')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ type: ResponseType.Delete })

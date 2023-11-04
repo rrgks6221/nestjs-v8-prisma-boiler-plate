@@ -8,6 +8,7 @@ import {
   Post,
   Res,
   UseGuards,
+  Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
@@ -25,6 +26,7 @@ import { RefreshAuthGuard } from '@src/apis/auth/guards/refresh-auth-guard.guard
 import { AuthService } from '@src/apis/auth/services/auth.service';
 import { UserResponseDto } from '@src/apis/users/dto/user-response.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
+import { ApiVersion } from '@src/constants/enum';
 import {
   ResponseType,
   SetResponse,
@@ -34,10 +36,11 @@ import { ParsePositiveIntPipe } from '@src/pipes/parse-positive-int.pipe';
 import { Response } from 'express';
 
 @ApiTags('auth')
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Version(ApiVersion.One)
   @ApiGetProfile('로그인한 유저 프로필')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ key: 'user', type: ResponseType.Detail })
@@ -46,6 +49,7 @@ export class AuthController {
     return new UserResponseDto(user);
   }
 
+  @Version(ApiVersion.One)
   @ApiSignUp('회원가입')
   @SetResponse({ key: 'user', type: ResponseType.Detail })
   @Post('sign-up')
@@ -67,6 +71,7 @@ export class AuthController {
     return new UserResponseDto(newUser);
   }
 
+  @Version(ApiVersion.One)
   @ApiSignIn('로그인')
   @SetResponse({ key: 'user', type: ResponseType.Detail })
   @Post('sign-in')
@@ -86,6 +91,7 @@ export class AuthController {
     return new UserResponseDto(user);
   }
 
+  @Version(ApiVersion.One)
   @ApiSignOut('로그아웃')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -97,6 +103,7 @@ export class AuthController {
     await this.authService.clearAuthToken(res, user.id);
   }
 
+  @Version(ApiVersion.One)
   @ApiRefresh('refresh token 을 이용한 access token 재발급')
   @UseGuards(RefreshAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -114,6 +121,7 @@ export class AuthController {
     });
   }
 
+  @Version(ApiVersion.One)
   @ApiCreateAccessTokenForDevelop('개발용으로 생성된 access token 발급 api')
   @Post('access-token/:userId')
   createAccessTokenForDevelop(

@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
@@ -24,6 +25,7 @@ import { PutUpdateUserRequestBodyDto } from '@src/apis/users/dto/put-update-user
 import { UserResponseDto } from '@src/apis/users/dto/user-response.dto';
 import { UserEntity } from '@src/apis/users/entities/user.entity';
 import { UsersService } from '@src/apis/users/services/users.service';
+import { ApiVersion } from '@src/constants/enum';
 import {
   ResponseType,
   SetResponse,
@@ -34,15 +36,16 @@ import { RestController } from '@src/types/type';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('users')
-@Controller('api/users')
+@Controller('users')
 export class UsersController
   implements Omit<RestController<UserResponseDto>, 'create'>
 {
   constructor(private readonly userService: UsersService) {}
 
+  @Version(ApiVersion.One)
   @SetResponse({ key: 'users', type: ResponseType.Pagination })
   @ApiFindAllAndCount('유저 리스트 조회')
-  @Get()
+  @Get('asd')
   async findAllAndCount(
     @Query() findUserListQueryDto: FindUserListRequestQueryDto,
   ): Promise<[UserResponseDto[], number]> {
@@ -53,6 +56,7 @@ export class UsersController
     return [plainToInstance(UserResponseDto, users), count];
   }
 
+  @Version(ApiVersion.One)
   @ApiFindOne('유저 단일 조회')
   @SetResponse({ key: 'user', type: ResponseType.Detail })
   @Get(':userId')
@@ -66,6 +70,7 @@ export class UsersController
     return new UserResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @ApiPatchUpdate('유저 부분 수정')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ key: 'user', type: ResponseType.Detail })
@@ -86,6 +91,7 @@ export class UsersController
     return new UserResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @ApiPutUpdate('유저 수정')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ key: 'user', type: ResponseType.Detail })
@@ -106,6 +112,7 @@ export class UsersController
     return new UserResponseDto(response);
   }
 
+  @Version(ApiVersion.One)
   @ApiRemove('유저 삭제')
   @UseGuards(JwtAuthGuard)
   @SetResponse({ type: ResponseType.Delete })

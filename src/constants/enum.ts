@@ -12,3 +12,7 @@ export enum BooleanString {
   True = 'true',
   False = 'false',
 }
+
+export enum ApiVersion {
+  One = '1',
+}

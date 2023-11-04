@@ -2,8 +2,10 @@ import {
   ClassSerializerInterceptor,
   INestApplication,
   Injectable,
+  RequestMethod,
   ValidationError,
   ValidationPipe,
+  VersioningType,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -23,8 +25,6 @@ import { HttpUnauthorizedExceptionFilter } from '@src/http-exceptions/filters/ht
 import { SuccessInterceptor } from '@src/interceptors/success-interceptor/success.interceptor';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-
-declare const module: any;
 
 @Injectable()
 export class AppService {
@@ -88,6 +88,33 @@ export class AppService {
     );
   }
 
+  setGlobalPrefix(app: INestApplication): void {
+    app.setGlobalPrefix('api', {
+      exclude: [
+        {
+          path: 'health',
+          method: RequestMethod.ALL,
+        },
+      ],
+    });
+  }
+
+  setEnableVersioning(app: INestApplication): void {
+    app.enableVersioning({
+      type: VersioningType.URI,
+    });
+  }
+
+  async setEnableShutdownHooks(app: INestApplication): Promise<void> {
+    const appConfigService = app.get<AppConfigService>(AppConfigService);
+
+    if (!appConfigService.isProduction()) {
+      return;
+    }
+
+    app.enableShutdownHooks();
+  }
+
   setSwagger(app: INestApplication): void {
     const appConfigService = app.get<AppConfigService>(AppConfigService);
 
@@ -106,16 +133,6 @@ export class AppService {
     SwaggerModule.setup('api-docs', app, document);
   }
 
-  setEnableShutdownHooks(app: INestApplication): void {
-    const appConfigService = app.get<AppConfigService>(AppConfigService);
-
-    if (!appConfigService.isProduction()) {
-      return;
-    }
-
-    app.enableShutdownHooks();
-  }
-
   async setPrisma(app: INestApplication): Promise<void> {
     const prismaService = app.get<PrismaService>(PrismaService);
 
@@ -130,10 +147,5 @@ export class AppService {
     await app.listen(PORT);
 
     console.info(`server listening on port ${PORT}`);
-
-    if (module.hot) {
-      module.hot.accept();
-      module.hot.dispose(() => app.close());
-    }
   }
 }
