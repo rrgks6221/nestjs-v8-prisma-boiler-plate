@@ -36,9 +36,25 @@ export class PrismaService
     });
 
     this.$on<any>('query', (event: Prisma.QueryEvent) => {
-      this.logger.debug('Query: ' + event.query);
-      this.logger.debug('Params: ' + event.params);
-      this.logger.debug('Duration: ' + event.duration + 'ms');
+      const { query, params, duration } = event;
+
+      if (['COMMIT', 'BEGIN', 'ROLLBACK'].includes(query)) {
+        this.logger.debug('Query: ' + query);
+
+        return;
+      }
+
+      this.logger.debug(
+        'Query: ' +
+          query +
+          '\n' +
+          'Params: ' +
+          params +
+          '\n' +
+          'Duration: ' +
+          duration +
+          'ms',
+      );
     });
   }
 
