@@ -107,7 +107,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/global-setup.ts"
+    ]
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
