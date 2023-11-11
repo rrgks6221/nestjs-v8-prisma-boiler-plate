@@ -1,13 +1,13 @@
 import { TypeMatcher } from '@test/matchers/type.matcher';
 
 describe(TypeMatcher, () => {
+  let typeMatcher: TypeMatcher;
+
+  beforeEach(() => {
+    typeMatcher = new TypeMatcher();
+  });
+
   describe(TypeMatcher.prototype.toBeNumber.name, () => {
-    let typeMatcher: TypeMatcher;
-
-    beforeEach(() => {
-      typeMatcher = new TypeMatcher();
-    });
-
     describe('nullable', () => {
       const options = { nullable: true };
 
@@ -54,12 +54,6 @@ describe(TypeMatcher, () => {
   });
 
   describe(TypeMatcher.prototype.toBeString.name, () => {
-    let typeMatcher: TypeMatcher;
-
-    beforeEach(() => {
-      typeMatcher = new TypeMatcher();
-    });
-
     describe('nullable', () => {
       const options = { nullable: true };
 
@@ -102,6 +96,20 @@ describe(TypeMatcher, () => {
 
         expect(pass).toBe(false);
       });
+    });
+  });
+
+  describe(TypeMatcher.prototype.toBeBoolean.name, () => {
+    it('boolean type true', () => {
+      const { pass } = typeMatcher.toBeBoolean(true);
+
+      expect(pass).toBe(true);
+    });
+
+    it('string type true', () => {
+      const { pass } = typeMatcher.toBeBoolean('true');
+
+      expect(pass).toBe(false);
     });
   });
 });

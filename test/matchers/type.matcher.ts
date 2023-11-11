@@ -42,4 +42,13 @@ export class TypeMatcher extends EntryMatcher {
       message: () => `expected ${receive}${pass ? ' ' : ' not '}string type`,
     };
   }
+
+  toBeBoolean(receive: unknown): jest.CustomMatcherResult {
+    const pass = typeof receive === 'boolean';
+
+    return {
+      pass,
+      message: () => `expected ${receive}${pass ? ' ' : ' not '}boolean type`,
+    };
+  }
 }
