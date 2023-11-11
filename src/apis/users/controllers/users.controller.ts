@@ -45,7 +45,7 @@ export class UsersController
   @Version(ApiVersion.One)
   @SetResponse({ key: 'users', type: ResponseType.Pagination })
   @ApiFindAllAndCount('유저 리스트 조회')
-  @Get('asd')
+  @Get()
   async findAllAndCount(
     @Query() findUserListQueryDto: FindUserListRequestQueryDto,
   ): Promise<[UserResponseDto[], number]> {
