@@ -50,6 +50,9 @@ export class AuthService {
       loginType: LoginType.EMAIL,
     });
 
+    /**
+     * @todo error code 수정
+     */
     if (!existUser) {
       throw new HttpUnauthorizedException({
         errorCode: ERROR_CODE.CODE004,

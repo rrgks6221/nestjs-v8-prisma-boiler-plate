@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { INestApplication } from '@nestjs/common';
 import { LoginType } from '@prisma/client';
 import { UserResponseDto } from '@src/apis/users/dto/user-response.dto';
@@ -9,8 +10,8 @@ export const testingLogin = async (app: INestApplication) => {
     .send({
       loginType: LoginType.EMAIL,
       password: 'password',
-      email: 'e2etesting@email.com',
-      nickname: 'e2testing',
+      email: faker.name.firstName() + 'e2etesting@email.com',
+      nickname: faker.name.firstName() + 'e2testing',
     });
 
   return {
