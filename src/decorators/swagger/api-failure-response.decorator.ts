@@ -4,9 +4,12 @@ import { ApiResponse } from '@nestjs/swagger';
 import { ERROR_CODE } from '@src/constants/error-response-code.constant';
 import { ERROR_REASON } from '@src/constants/error-response-reason.constant';
 
+/**
+ * @todo swagger 랑 실제랑 다름
+ */
 export const ApiFailureResponse = (
   status: ErrorHttpStatusCode,
-  codes: typeof ERROR_CODE[keyof typeof ERROR_CODE][],
+  errorCodes: typeof ERROR_CODE[keyof typeof ERROR_CODE][],
 ) => {
   return applyDecorators(
     ApiResponse({
@@ -25,25 +28,24 @@ export const ApiFailureResponse = (
             minimum: 400,
             example: status,
           },
+          errorCode: {
+            type: 'string',
+            description: 'error code',
+            example: errorCodes[0],
+            enum: errorCodes,
+          },
           reason: {
             type: 'string',
-            description: '에러 사유',
-            example: ERROR_REASON[ERROR_CODE[codes[0]]],
-            examples: codes.map((code) => ERROR_REASON[ERROR_CODE[code]]),
+            description: 'error reason',
+            example: ERROR_REASON[ERROR_CODE[errorCodes[0]]],
+            enum: errorCodes.map(
+              (errorCode) => ERROR_REASON[ERROR_CODE[errorCode]],
+            ),
           },
-          code: {
+          message: {
             type: 'string',
-            description: '에러 코드',
-            example: codes[0],
-            examples: codes.map((code) => ERROR_CODE[code]),
-          },
-          messages: {
-            type: 'array',
-            description: '디테일한 메시지',
-            example: ['디테일한 메시지'],
-            items: {
-              type: 'string',
-            },
+            description: 'detail error message',
+            example: 'detail error message',
           },
         },
       },
