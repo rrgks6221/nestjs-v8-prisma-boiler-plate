@@ -1,8 +1,16 @@
+import { ApiOperationOptions } from '@nestjs/swagger';
+
 export type PrismaModel = 'user' | 'post';
 
 export type Target = {
   model?: PrismaModel;
   field?: string;
+};
+
+export type ApiOperator<M extends string> = {
+  [key in Capitalize<M>]: (
+    apiOperationOptions: ApiOperationOptions,
+  ) => PropertyDecorator;
 };
 
 export interface RestController<BaseResponse> {

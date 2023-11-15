@@ -11,13 +11,7 @@ import {
   Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  ApiGetProfile,
-  ApiRefresh,
-  ApiSetAccessTokenForDevelop,
-  ApiSignIn,
-  ApiSignOut,
-} from '@src/apis/auth/controllers/auth.swagger';
+import { ApiAuth } from '@src/apis/auth/controllers/auth.swagger';
 import { SignInDtoRequestBody } from '@src/apis/auth/dtos/sign-in-request-body.dto';
 import { JwtAuthGuard } from '@src/apis/auth/guards/jwt-auth.guard';
 import { RefreshAuthGuard } from '@src/apis/auth/guards/refresh-auth-guard.guard';
@@ -39,7 +33,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Version(ApiVersion.One)
-  @ApiGetProfile('로그인한 유저 프로필')
+  @ApiAuth.GetProfile({ summary: '로그인한 유저 프로필' })
   @UseGuards(JwtAuthGuard)
   @SetResponse({ key: 'user', type: ResponseType.Detail })
   @Get('profile')
@@ -48,7 +42,10 @@ export class AuthController {
   }
 
   @Version(ApiVersion.One)
-  @ApiSignIn('로그인')
+  @ApiAuth.SignIn({
+    summary: '로그인',
+    description: 'cookie 를 통해 session 을 제어합니다.',
+  })
   @SetResponse({ key: 'user', type: ResponseType.Detail })
   @Post('sign-in')
   async signIn(
@@ -68,7 +65,10 @@ export class AuthController {
   }
 
   @Version(ApiVersion.One)
-  @ApiSignOut('로그아웃')
+  @ApiAuth.SignOut({
+    summary: '로그아웃',
+    description: 'cookie 를 제거하여 session 을 제거합니다.',
+  })
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('sign-out')
@@ -80,7 +80,11 @@ export class AuthController {
   }
 
   @Version(ApiVersion.One)
-  @ApiRefresh('refresh token 을 이용한 access token 재발급')
+  @ApiAuth.Refresh({
+    summary: 'refresh token 을 이용한 access token 재발급',
+    description:
+      'cookie 내에 refresh token 을 이용하여 access token 을 갱신합니다.',
+  })
   @UseGuards(RefreshAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('refresh')
@@ -98,7 +102,11 @@ export class AuthController {
   }
 
   @Version(ApiVersion.One)
-  @ApiSetAccessTokenForDevelop('개발용으로 생성된 access token 발급 api')
+  @ApiAuth.SetAccessTokenForDevelop({
+    summary: '개발용으로 생성된 access token 발급 api',
+    description:
+      '상용 서버에서는 존재하지 않습니다. id 를 기준으로 cookie 에 token 을 추가합니다.',
+  })
   @Post('set-token/:userId')
   async setAccessTokenForDevelop(
     @Res({ passthrough: true }) res: Response,
