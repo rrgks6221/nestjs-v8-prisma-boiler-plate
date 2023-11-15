@@ -42,6 +42,20 @@ async function main() {
       });
 
       console.log(post);
+
+      for (let j = 0; j < 10; j += 1) {
+        const description = faker.random.words(10);
+
+        const postComment = await prisma.postComment.create({
+          data: {
+            userId: user.id,
+            postId: post.id,
+            description,
+          },
+        });
+
+        console.log(postComment);
+      }
     }
   }
 }
