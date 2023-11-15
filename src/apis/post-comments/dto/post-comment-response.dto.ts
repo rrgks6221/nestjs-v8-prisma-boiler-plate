@@ -24,4 +24,10 @@ export class PostCommentResponseDto
     description: '내용',
   })
   description: string;
+
+  constructor(postComment: Partial<PostCommentResponseDto> = {}) {
+    super();
+
+    Object.assign(this, postComment);
+  }
 }

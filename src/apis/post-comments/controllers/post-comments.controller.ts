@@ -63,11 +63,21 @@ export class PostCommentsController
   @Version(ApiVersion.One)
   @SetResponse({ key: 'postComment', type: ResponseType.Detail })
   @Get(':postCommentId')
-  findOne(
+  async findOne(
     @Param('postId', ParsePositiveIntPipe) postId: number,
     @Param('postCommentId', ParsePositiveIntPipe) postCommentId: number,
   ): Promise<PostCommentResponseDto> {
-    return this.postCommentsService.findOneOrNotFound();
+    const postComment = await this.postCommentsService.findOneOrNotFound(
+      postId,
+      postCommentId,
+    );
+
+    const response = await this.postCommentsService.buildDetailResponse(
+      postId,
+      postComment.id,
+    );
+
+    return new PostCommentResponseDto(response);
   }
 
   @ApiPostComments.Create({ summary: 'postComment 생성' })

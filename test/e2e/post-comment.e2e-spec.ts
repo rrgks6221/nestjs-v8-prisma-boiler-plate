@@ -126,7 +126,7 @@ describe('PostCommentsController (e2e)', () => {
     });
   });
 
-  describe.skip('/api/v1/posts/:postId/post-comments/:postCommentId (GET)', () => {
+  describe('/api/v1/posts/:postId/post-comments/:postCommentId (GET)', () => {
     it('find one post comment', async () => {
       const result = await request(app.getHttpServer()).get(
         basePath + '/' + testingPostComment.id,
@@ -136,7 +136,7 @@ describe('PostCommentsController (e2e)', () => {
       const { postComment } = body;
       const { id, postId, userId, description } = postComment;
 
-      expect(statusCode).toBe(HttpStatus.CREATED);
+      expect(statusCode).toBe(HttpStatus.OK);
 
       expect(id).toBeInteger();
       expect(postId).toBeInteger();
